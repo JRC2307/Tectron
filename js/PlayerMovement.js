@@ -1,3 +1,4 @@
+// https://github.com/PiusNyakoojo/Firebase-and-Threejs-Multiplayer-Game-Template
 THREE.PlayerControls = function ( camera, player, domElement ) {
 
     this.camera = camera;
