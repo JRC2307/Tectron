@@ -49,7 +49,7 @@ function createRoom(playerName) {
             host: true,
             number: 1,
             name: playerName
-        })
+        }, {merge: true})
         .then(function(playerDocRef) {
             console.log("Host player added to new room: ", playerDocRef.id);
         })
@@ -86,13 +86,14 @@ function joinRoom(roomKey, playerName) {
                 db.collection("rooms/"+roomID+"/players")
                     .get()
                     .then(function(roomPlayersQuerySnapshot) {
-                        if (roomPlayersQuerySnapshot.size > 0) {
+                        // limit room size to 4
+                        if (roomPlayersQuerySnapshot.size > 0 && roomPlayersQuerySnapshot.size < 4) {
                             // Add player as room guest.
                             db.collection("rooms/"+roomID+"/players/"+playerID).set({
                                 host: false,
-                                number: roomPlayersQuerySnapshot.size,
+                                number: (roomPlayersQuerySnapshot.size +1),
                                 name: playerName
-                            })
+                            }, {merge: true})
                             .then(function(playerDocRef) {
                                 console.log("Guest player added to new room: ", playerDocRef.id);
                             })
@@ -108,4 +109,28 @@ function joinRoom(roomKey, playerName) {
         .catch(function(error) {
             console.log("Error getting documents: ", error);
         });
+}
+
+function getCurrentPlayerDocument() {
+    return db.doc("rooms/"+roomID+"/players/"+playerID).get();
+}
+
+// function receives a player object containing new position and orientation.
+function updateCurrentPlayerDocument(player) {
+    return db.collection("rooms/"+roomID+"/players/"+playerID).set(player);
+}
+
+// fetch players collection, returns listener
+function getPlayersCollection() {
+    return db.collection("rooms/"+roomID+"/players").onSnapshot();
+}
+
+// function receives a tail object containing: position, orientation and color.
+function addCurrentPlayerTail(tail) {
+    return db.collection("rooms/"+roomID+"/players/"+playerID+"/tails/").add(tail);
+}
+
+// fetch a players tail collection.
+function getPlayerTail(otherPlayerID) {
+    return db.collection("rooms/"+roomID+"/players/"+otherPlayerID+"/tails/").onSnapshot();
 }
