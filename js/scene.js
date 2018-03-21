@@ -113,6 +113,11 @@ class Scene {
         );
 
         this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+      } else {
+
+        // player.model.position.x = player.getXPosition();
+        // player.model.position.z = player.getZPosition();
+
       }
     }
   }
