@@ -1,7 +1,8 @@
 class Scene {
 
-  constructor(player1) {
+  constructor(players) {
 
+    this.players = players
     this.createFirstPersonCamera();
     this.createMiniMapCamera();
 
@@ -10,9 +11,9 @@ class Scene {
     let helper = new THREE.CameraHelper( this.miniMapCamera );
     this.scene.add( helper );
 
-    this.player = player1
-
-    this.scene.add( this.player.model );
+    for (var player of players) {
+      this.scene.add( player.model );
+    }
 
     this.createGroundPlane();
     this.addLights();
@@ -91,16 +92,37 @@ class Scene {
   }
 
 
+  renderPlayers() {
+    for (var player of this.players) {
+
+      if (player.controllable) {
+
+        player.model.position.x += player.getXMovement();
+        player.model.position.z += player.getZMovement();
+
+        // Camera 1 Orientation
+        this.firstPersonCamera.position.set(
+          player.model.position.x,
+          player.model.position.y + 10,
+          player.model.position.z + 20
+        );
+
+        this.firstPersonCamera.lookAt(
+          player.model.position.x,
+          player.model.position.y -20,
+          player.model.position.z -20
+        );
+
+        this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+      }
+    }
+  }
+
+
+  // This function could be refactored
   render() {
-    this.player.model.position.x += this.player.getXMovement();
-    this.player.model.position.z += this.player.getZMovement();
 
-    // Big scene
-    this.firstPersonCamera.position.set(this.player.model.position.x, this.player.model.position.y + 10, this.player.model.position.z + 20);
-
-    // Camera 1 Orientation
-    this.firstPersonCamera.lookAt(this.player.model.position.x, this.player.model.position.y -20, this.player.model.position.z -20);
-    this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+    this.renderPlayers();
 
     this.renderer.clear();
     this.renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );

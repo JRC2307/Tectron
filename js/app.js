@@ -1,11 +1,11 @@
+let players
+
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
   y: 10,
   width: (window.innerWidth/4),
   height: (window.innerHeight/4)
 };
-
-let player = new Player()
 
 let keys = {
   87: 'up', // W
@@ -27,7 +27,9 @@ var keyActions = {
   'left': {
     enabled: true,
     action: function() {
-      player.changeDirection('left');
+      for (var player of players) {
+        player.changeDirection('left');
+      }
       // player.forward();
       // keyActions.backward.enabled = false;
       console.log('left');
@@ -36,7 +38,9 @@ var keyActions = {
   'right': {
     enabled: true,
     action: function() {
-      player.changeDirection('right');
+      for (var player of players) {
+        player.changeDirection('right');
+      }
       // player.forward();
       // keyActions.backward.enabled = false;
       console.log('right');
@@ -69,15 +73,25 @@ function onWindowResize() {
     height: (window.innerWidth/4),
     width: (window.innerHeight/4)
   };
-  firstPersonCamera.aspect = window.innerWidth / window.innerHeight;
-  firstPersonCamera.updateProjectionMatrix();
-  miniMapCamera.aspect = window.innerWidth / window.innerHeight;
-  miniMapCamera.updateProjectionMatrix();
+  scene.firstPersonCamera.aspect = window.innerWidth / window.innerHeight;
+  scene.firstPersonCamera.updateProjectionMatrix();
+  scene.miniMapCamera.aspect = window.innerWidth / window.innerHeight;
+  scene.miniMapCamera.updateProjectionMatrix();
   scene.renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 function initGui() {
 
+}
+
+function initPlayers() {
+  let players = [];
+  players.push(new Player(1, true));
+  players.push(new Player(2, false));
+  players.push(new Player(3, false));
+  players.push(new Player(4, false));
+
+  return players;
 }
 
 function animate() {
@@ -87,7 +101,8 @@ function animate() {
 
 
 function run() {
-  scene = new Scene(player);
+  players = initPlayers();
+  scene = new Scene(players);
 
   animate();
 }

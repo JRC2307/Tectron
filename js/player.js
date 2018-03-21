@@ -1,21 +1,70 @@
 class Player {
 
-  constructor() {
+  constructor(playerID, controllable) {
+    this.playerID = playerID;
+    this.controllable = controllable;
     this.isAlive = true;
-    this.model = this.initPlayerModel();
+
     this.speed = 0.4;
-    this.direction = 'north'
+    this.z = 0
+
+    // Setup the players facing each other
+    switch(playerID) {
+      case 1:
+        this.direction = 'north';
+        this.x = 0;
+        this.z = 10;
+        break;
+      case 2:
+        this.direction = 'south';
+        this.x = 0;
+        this.z = -10;
+        break;
+      case 3:
+        this.direction = 'west';
+        this.x = 10;
+        this.z = 0;
+        break;
+      case 4:
+        this.direction = 'east';
+        this.x = -10;
+        this.z = 0;
+        break;
+    }
+
+    this.model = this.initPlayerModel();
   }
 
   initPlayerModel() {
     let geometry = new THREE.BoxGeometry( 5, 5, 5 );
     let material = new THREE.MeshStandardMaterial({color: 0xfff000});
     let cube = new THREE.Mesh( geometry, material );
-    cube.position.set(0, 0, 0);
+
+    cube.position.set(this.x, 0, this.z);
     cube.castShadow = true; //default is false
     cube.receiveShadow = true;
 
     return cube
+  }
+
+  getXPosition() {
+    // Firebase func here
+    return 1
+  }
+
+  getZPosition() {
+    // Firebase func here
+    return 1
+  }
+
+  setXPosition(x) {
+    // Firebase func here
+    //
+  }
+
+  setZPosition(z) {
+    // Firebase func here
+    // this.z = z
   }
 
   getXMovement() {
@@ -41,6 +90,9 @@ class Player {
   }
 
   changeDirection(newDirection) {
+    if (!this.controllable)
+      return
+
     switch(this.direction) {
       case 'north':
         if (newDirection == 'left')
