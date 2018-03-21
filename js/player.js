@@ -7,6 +7,7 @@ class Player {
 
     this.speed = 0.4;
     this.z = 0
+    this.tail = 5
 
     // Setup the players facing each other
     switch(playerID) {
@@ -36,15 +37,15 @@ class Player {
   }
 
   initPlayerModel() {
-    let geometry = new THREE.BoxGeometry( 5, 5, 5 );
-    let material = new THREE.MeshStandardMaterial({color: 0xfff000});
-    let cube = new THREE.Mesh( geometry, material );
+    let geometry = new THREE.BoxGeometry( 5, 5, this.tail );
+    let material = new THREE.MeshStandardMaterial({color: 0xffff00});
+    let model = new THREE.Mesh( geometry, material );
 
-    cube.position.set(this.x, 0, this.z);
-    cube.castShadow = true; //default is false
-    cube.receiveShadow = true;
+    model.position.set(this.x, 0, this.z);
+    model.castShadow = true; //default is false
+    model.receiveShadow = true;
 
-    return cube
+    return model
   }
 
   getXPosition() {
@@ -88,6 +89,7 @@ class Player {
         return 0;
     }
   }
+
 
   changeDirection(newDirection) {
     if (!this.controllable)

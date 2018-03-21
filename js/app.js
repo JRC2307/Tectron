@@ -21,7 +21,6 @@ var keyActions = {
     enabled: true,
     action: function() {
       // keyActions.backward.enabled = false;
-      console.log('up');
     }
   },
   'left': {
@@ -32,7 +31,6 @@ var keyActions = {
       }
       // player.forward();
       // keyActions.backward.enabled = false;
-      console.log('left');
     }
   },
   'right': {
@@ -43,7 +41,6 @@ var keyActions = {
       }
       // player.forward();
       // keyActions.backward.enabled = false;
-      console.log('right');
     }
   },
   'down': {
@@ -51,7 +48,6 @@ var keyActions = {
     action: function(){
       // player.forward();
       // keyActions.backward.enabled = false;
-      console.log('down');
     }
   },
   'spacebar': {
@@ -59,7 +55,6 @@ var keyActions = {
     action: function() {
       // player.forward();
       // keyActions.backward.enabled = false;
-      console.log('spacebar');
     }
   }
 };
@@ -86,6 +81,7 @@ function initGui() {
 
 function initPlayers() {
   let players = [];
+
   players.push(new Player(1, true));
   players.push(new Player(2, false));
   players.push(new Player(3, false));

@@ -91,7 +91,6 @@ class Scene {
     this.renderer.setSize( window.innerWidth, window.innerHeight );
   }
 
-
   renderPlayers() {
     for (var player of this.players) {
 
