@@ -92,13 +92,8 @@ class Scene {
 
 
   render() {
-    deltaRotation += 0.01;
-    this.player.model.position.x = Math.sin(deltaRotation) * 10;
-    this.player.model.position.z = Math.cos(deltaRotation) * 10;
-
-    this.player.model.rotation.x += 0.005;
-    this.player.model.rotation.y += 0.005;
-    this.player.model.rotation.z += 0.005;
+    this.player.model.position.x += this.player.getXMovement();
+    this.player.model.position.z += this.player.getZMovement();
 
     // Big scene
     this.firstPersonCamera.position.set(this.player.model.position.x, this.player.model.position.y + 10, this.player.model.position.z + 20);

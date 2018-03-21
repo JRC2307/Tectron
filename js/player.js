@@ -16,4 +16,14 @@ class Player {
     return cube
   }
 
+  getXMovement() {
+    let x = 1;
+    return x
+  }
+
+  getZMovement() {
+    let z = 0;
+    return z
+  }
+
 }
