@@ -1,6 +1,6 @@
 class Scene {
 
-  constructor() {
+  constructor(player1) {
 
     this.createFirstPersonCamera();
     this.createMiniMapCamera();
@@ -10,7 +10,7 @@ class Scene {
     let helper = new THREE.CameraHelper( this.miniMapCamera );
     this.scene.add( helper );
 
-    this.player = new Player();
+    this.player = player1
 
     this.scene.add( this.player.model );
 

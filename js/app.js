@@ -5,6 +5,7 @@ let displayWindow = {
   height: (window.innerHeight/4)
 };
 
+let player = new Player()
 
 let keys = {
   87: 'up', // W
@@ -19,7 +20,6 @@ var keyActions = {
   'up': {
     enabled: true,
     action: function() {
-      // player.forward();
       // keyActions.backward.enabled = false;
       console.log('up');
     }
@@ -27,6 +27,7 @@ var keyActions = {
   'left': {
     enabled: true,
     action: function() {
+      player.changeDirection('left');
       // player.forward();
       // keyActions.backward.enabled = false;
       console.log('left');
@@ -35,6 +36,7 @@ var keyActions = {
   'right': {
     enabled: true,
     action: function() {
+      player.changeDirection('right');
       // player.forward();
       // keyActions.backward.enabled = false;
       console.log('right');
@@ -83,8 +85,10 @@ function animate() {
   scene.render();
 }
 
+
 function run() {
-  scene = new Scene();
+  scene = new Scene(player);
+
   animate();
 }
 
