@@ -12,15 +12,9 @@ class Scene {
     let helper = new THREE.CameraHelper( this.miniMapCamera );
     this.scene.add( helper );
 
-    // cube
-    let geometry = new THREE.BoxGeometry( 5, 5, 5 );
-    let material = new THREE.MeshStandardMaterial({color: 0xfff000});
-    cube = new THREE.Mesh( geometry, material );
-    cube.position.set(0, 0, 0);
-    cube.castShadow = true; //default is false
-    cube.receiveShadow = true;
+    let player = new Player();
 
-    this.scene.add( cube );
+    this.scene.add( player.model );
 
     this.createGroundPlane();
     this.addLights();
