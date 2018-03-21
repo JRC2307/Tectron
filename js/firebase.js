@@ -134,3 +134,30 @@ function addCurrentPlayerTail(tail) {
 function getPlayerTail(otherPlayerID) {
     return db.collection("rooms/"+roomID+"/players/"+otherPlayerID+"/tails/").onSnapshot();
 }
+
+// -------------- Test Functions --------------
+
+// function receives a player object containing new position and orientation.
+function testUpdateCurrentPlayerDocument(player) {
+    return db.collection("players/"+playerID).set(player);
+}
+
+// fetch players collection, returns listener
+function testGetPlayersCollection() {
+    return db.collection("players").onSnapshot();
+}
+
+// fetch players collection, returns listener
+function testGetPlayersCollectionOnce() {
+    return db.collection("players")
+        .get()
+        .then(function(querySnapshot) {
+            var players = [];
+            querySnapshot.forEach(function(doc) {
+                var player = doc.data();
+                player.id = doc.id;
+                players.push(player);
+            });
+            return players
+        });
+}

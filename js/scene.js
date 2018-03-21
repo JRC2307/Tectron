@@ -15,11 +15,13 @@ var window2 = {
 };
 var deltaRotation = 0;
 
+var players = [];
+var playerCubes = [];
+
 init();
 animate();
 
 function init() {
-
     // Big scene
     camera1 = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
     camera1.position.set(-60,10,0);
@@ -76,6 +78,7 @@ function init() {
 
     window.addEventListener( 'resize', onWindowResize, false );
 
+    initPlayers();
     initGui();
 }
 
@@ -107,20 +110,52 @@ function initGui() {
 
 }
 
+function initPlayers() {
+    testGetPlayersCollection()
+        .then( function(playersSnapshot) {
+            console.log("Players changed...");
+            // players = [];
+            playersSnapshot.forEach(function(doc) {
+                if (doc.id !== playerID) {
+                    console.log("Player: " + doc);
+                    var player = players.filter(function(player){ return player.id === doc.id });
+                    if (player === undefined) {
+                        player = doc.data();
+                        player.id = doc.id();
+                        players.push(player);
+                        // cube
+                        geometry = new THREE.BoxGeometry( 5, 5, 5 );
+                        material = new THREE.MeshStandardMaterial({color: 0xfff000});
+                        cube = new THREE.Mesh( geometry, material );
+                        cube.position.set(player.posX, player.posY, player.posZ);
+                        cube.castShadow = true; //default is false
+                        cube.receiveShadow = true;
+                        playerCubes.push(cube);
+                        scene.add( cube );
+                    } else {
+                        player = doc.data();
+                        player.id = doc.id;
+                    }
+                }
+            });
+        })
+}
+
 function animate() {
     requestAnimationFrame( animate );
     render();
 }
-
 
 function render() {
     deltaRotation += 0.01;
     cube.position.x = Math.sin(deltaRotation) * 10;
     cube.position.z = Math.cos(deltaRotation) * 10;
 
-    cube.rotation.x += 0.005;
-    cube.rotation.y += 0.005;
-    cube.rotation.z += 0.005;
+    testUpdateCurrentPlayerDocument({
+        posX: cube.position.x,
+        posY: cube.position.y,
+        posZ: cube.position.z
+    });
 
     // Big scene
     camera1.position.set(cube.position.x, cube.position.y + 10, cube.position.z + 20);
