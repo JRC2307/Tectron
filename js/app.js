@@ -32,8 +32,7 @@ function animate() {
 
 function run() {
   scene = new Scene();
-  scene.init()
   animate();
 }
 
-run()
+run();
