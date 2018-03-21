@@ -1,5 +1,3 @@
-let cube; // This should go to player
-
 class Scene {
 
   constructor() {
@@ -12,9 +10,9 @@ class Scene {
     let helper = new THREE.CameraHelper( this.miniMapCamera );
     this.scene.add( helper );
 
-    let player = new Player();
+    this.player = new Player();
 
-    this.scene.add( player.model );
+    this.scene.add( this.player.model );
 
     this.createGroundPlane();
     this.addLights();
@@ -95,18 +93,18 @@ class Scene {
 
   render() {
     deltaRotation += 0.01;
-    cube.position.x = Math.sin(deltaRotation) * 10;
-    cube.position.z = Math.cos(deltaRotation) * 10;
+    this.player.model.position.x = Math.sin(deltaRotation) * 10;
+    this.player.model.position.z = Math.cos(deltaRotation) * 10;
 
-    cube.rotation.x += 0.005;
-    cube.rotation.y += 0.005;
-    cube.rotation.z += 0.005;
+    this.player.model.rotation.x += 0.005;
+    this.player.model.rotation.y += 0.005;
+    this.player.model.rotation.z += 0.005;
 
     // Big scene
-    this.firstPersonCamera.position.set(cube.position.x, cube.position.y + 10, cube.position.z + 20);
+    this.firstPersonCamera.position.set(this.player.model.position.x, this.player.model.position.y + 10, this.player.model.position.z + 20);
 
     // Camera 1 Orientation
-    this.firstPersonCamera.lookAt(cube.position.x, cube.position.y -20, cube.position.z -20);
+    this.firstPersonCamera.lookAt(this.player.model.position.x, this.player.model.position.y -20, this.player.model.position.z -20);
     this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
 
     this.renderer.clear();
