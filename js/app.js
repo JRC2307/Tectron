@@ -7,12 +7,6 @@ let displayWindow = {
 
 let deltaRotation = 0;
 
-
-sc = new Scene();
-sc.init()
-animate();
-
-
 function onWindowResize() {
     displayWindow = {
         x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -24,7 +18,7 @@ function onWindowResize() {
     firstPersonCamera.updateProjectionMatrix();
     miniMapCamera.aspect = window.innerWidth / window.innerHeight;
     miniMapCamera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    scene.renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 function initGui() {
@@ -33,5 +27,13 @@ function initGui() {
 
 function animate() {
     requestAnimationFrame(animate);
-    sc.render();
+    scene.render();
 }
+
+function run() {
+  scene = new Scene();
+  scene.init()
+  animate();
+}
+
+run()

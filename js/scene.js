@@ -1,10 +1,10 @@
-let firstPersonCamera, miniMapCamera, scene, renderer, texture, groundPlane, gridHelper;
-let geometry, material, cube;
-let ambientLight, hemisphereLight;
+let firstPersonCamera, miniMapCamera, cube; // This should go to player
 
 class Scene {
 
   constructor() {
+    this.renderer
+    this.scene
   }
 
   init() {
@@ -25,23 +25,23 @@ class Scene {
     miniMapCamera.lookAt(new THREE.Vector3(0,0,0));
     miniMapCamera.up = new THREE.Vector3(0,0,0);
 
-    scene = new THREE.Scene();
+    this.scene = new THREE.Scene();
     // scene.background = new THREE.Color( 0xf0f0f0 );
 
     let helper = new THREE.CameraHelper( miniMapCamera );
-    scene.add( helper );
+    this.scene.add( helper );
 
     // cube
-    geometry = new THREE.BoxGeometry( 5, 5, 5 );
-    material = new THREE.MeshStandardMaterial({color: 0xfff000});
+    let geometry = new THREE.BoxGeometry( 5, 5, 5 );
+    let material = new THREE.MeshStandardMaterial({color: 0xfff000});
     cube = new THREE.Mesh( geometry, material );
     cube.position.set(0, 0, 0);
     cube.castShadow = true; //default is false
     cube.receiveShadow = true;
-    scene.add( cube );
+    this.scene.add( cube );
 
     // Comment the next 4 lines for textures:
-    groundPlane = new THREE.Mesh(
+    let groundPlane = new THREE.Mesh(
       new THREE.PlaneGeometry( 80, 80 ),
       new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
     );
@@ -51,17 +51,17 @@ class Scene {
     groundPlane.rotation.x = Math.PI / 2;
     groundPlane.castShadow = true; //default is false
     groundPlane.receiveShadow = true;
-    scene.add(groundPlane);
+    this.scene.add(groundPlane);
 
     this.addLights();
 
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-    renderer.autoClear = false; // important!
+    this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+    this.renderer.autoClear = false; // important!
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( this.renderer.domElement );
 
     window.addEventListener( 'resize', onWindowResize, false );
 
@@ -69,12 +69,12 @@ class Scene {
 
   addLights() {
     // AmbientLight
-    ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 ); // soft white light
-    scene.add( ambientLight );
+    let ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 ); // soft white light
+    this.scene.add( ambientLight );
 
     // HemisphereLight
-    hemisphereLight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
-    scene.add(hemisphereLight);
+    let hemisphereLight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+    this.scene.add(hemisphereLight);
   }
 
   render() {
@@ -93,13 +93,13 @@ class Scene {
     firstPersonCamera.lookAt(cube.position.x, cube.position.y -20, cube.position.z -20);
     firstPersonCamera.up = new THREE.Vector3(0,0,0);
 
-    renderer.clear();
-    renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
-    renderer.render( scene, firstPersonCamera );
+    this.renderer.clear();
+    this.renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+    this.renderer.render( this.scene, firstPersonCamera );
 
-    renderer.clearDepth(); // important! clear the depth buffer
-    renderer.setViewport( displayWindow.x, displayWindow.y, displayWindow.width, displayWindow.height);
-    renderer.render( scene, miniMapCamera );
+    this.renderer.clearDepth(); // important! clear the depth buffer
+    this.renderer.setViewport( displayWindow.x, displayWindow.y, displayWindow.width, displayWindow.height);
+    this.renderer.render( this.scene, miniMapCamera );
   }
 
 }
