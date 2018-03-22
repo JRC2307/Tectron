@@ -124,6 +124,7 @@ function debug() {
 
   document.addEventListener('keyup', onKeyPressUp, false);
   let player = new Player(1, true, 'Tester', 1);
+  let player = new Player(2, false, 'Bot', 2);
   players.push(player);
   scene = new Scene(players);
 
