@@ -110,12 +110,12 @@ function getCurrentPlayerDocument() {
 
 // function receives a player object containing new position and orientation.
 function updateCurrentPlayerDocument(player) {
-  return db.collection("rooms/"+roomID+"/players/"+mainPlayerID).set(player);
+  return db.doc("rooms/"+roomID+"/players/"+mainPlayerID).set(player);
 }
 
 // fetch players collection, returns listener
 function getPlayersCollection() {
-  return db.collection("rooms/"+roomID+"/players").onSnapshot();
+  return db.collection("rooms/"+roomID+"/players");
 }
 
 // function receives a tail object containing: position, orientation and color.
@@ -125,5 +125,5 @@ function addCurrentPlayerTail(tail) {
 
 // fetch a players tail collection.
 function getPlayerTail(othermainPlayerID) {
-  return db.collection("rooms/"+roomID+"/players/"+othermainPlayerID+"/tails/").onSnapshot();
+  // return db.collection("rooms/"+roomID+"/players/"+othermainPlayerID+"/tails/").onSnapshot();
 }

@@ -82,25 +82,22 @@ function initGui() {
 
 function initPlayers() { // WIP, not tested
   // Get players changes in real time
-  getPlayersCollection()
-    .then( function(playersSnapshot) {
-      console.log("Players changed...");
+  getPlayersCollection().onSnapshot(function(playersSnapshot) {
+      // console.log("Players changed...");
       playersSnapshot.forEach(function(playerDoc) {
-        // all players but the main player
-        if (doc.id !== mainPlayerID) {
-          console.log("Player: " + doc);
+
+        if (playerDoc.id !== mainPlayerID) {
+          // console.log("Player: " + doc);
           let player = players.filter(function(p){ return p.id === playerDoc.id });
           // check if player was previously added
+
           if (player === undefined) {
             // player not found in array, add to array
             player = new Player(playerDoc.id(), false, playerDoc.data().name, playerDoc.data().number);
             players.push(player);
           } else {
-            // player found in array, update value
-            /**
-             *  In this section, player info is updated in real time.
-             *  Player data located at: playerDoc.data();
-             */
+            player.setXPosition(playerDoc.data().x);
+            player.setXPosition(playerDoc.data().z);
           }
         }
       });
@@ -126,7 +123,7 @@ function debug() {
   let player = new Player(1, true, 'Tester', 1);
   let player2 = new Player(2, false, 'Bot', 2);
   players.push(player);
-  players.push(player22);
+  players.push(player2);
   scene = new Scene(players);
 
   animate();
