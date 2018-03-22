@@ -1,4 +1,4 @@
-let players
+let players = [];
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -80,8 +80,6 @@ function initGui() {
 }
 
 function initPlayers() {
-  let players = [];
-
   players.push(new Player(1, true));
   players.push(new Player(2, false));
   players.push(new Player(3, false));
@@ -110,6 +108,90 @@ function onKeyPressUp(e) {
   }
 }
 
-document.addEventListener('keyup', onKeyPressUp, false);
+function startGame() {
+  document.addEventListener('keyup', onKeyPressUp, false);
+  run();
+}
 
-run();
+// Main app configurations:
+
+/**
+ * Function to log the user in (if not logged in yet) and send flow to let the user create or join a room.
+ */
+function login() {
+  firebase.auth().onAuthStateChanged(function( user ) {
+    if ( user ) {
+      // User is signed in
+      console.log( "Player is signed in " + user.uid);
+      mainPlayerID = user.uid;
+      players.push(new Player(mainPlayerID, true));
+      createOrJoinRoom();
+    } else {
+      // User is signed out
+      console.log( "Player is signed out " );
+      firebase.auth().signInAnonymously().catch(function(error) {
+        console.log( error.code + ": " + error.message );
+      })
+    }
+  });
+}
+
+/**
+ * Function for the user to decide to join a room or create one.
+ */
+function createOrJoinRoom() {
+  let createRoom = prompt("Create room (1) or join room (0):");
+  if (createRoom === 1) {
+    onCrateRoom();
+  } else {
+    onJoinRoom();
+  }
+}
+
+function onCrateRoom() {
+  let playerName = prompt("Creating: Introduce your player name:");
+  if(playerName === null) {
+    alert("Invalid value. Try again");
+    onCrateRoom()
+  }
+  console.log(playerName);
+  createRoom(playerName)
+    .then(function (playerInfo) {
+      console.log("room created successfully.");
+      console.log(playerInfo);
+    })
+    .catch(function (error) {
+      console.error("Error creating room.");
+      console.error(error);
+    });
+}
+
+function onJoinRoom() {
+  let key = prompt("Joining: Introduce the room key:");
+  if(key === null || key.length !== 6) {
+    alert("Invalid value. Try again");
+    onJoinRoom();
+  }
+  console.log(key);
+  let playerName = prompt("Introduce your player name:");
+  if(playerName === null) {
+    alert("Invalid value. Try again");
+    onJoinRoom();
+  }
+  console.log(playerName);
+  joinRoom(key, playerName)
+    .then(function (playerInfo) {
+      console.log("Joined room successfully.");
+      console.log(playerInfo);
+    })
+    .catch(function (error) {
+      console.error("Error joining  room.");
+      console.error(error);
+    });
+}
+
+function startApp() {
+  login();
+}
+
+startApp();

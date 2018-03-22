@@ -4,10 +4,11 @@ class Player {
     this.playerID = playerID;
     this.controllable = controllable;
     this.isAlive = true;
+    // this.host = false;
 
     this.speed = 0.4;
-    this.z = 0
-    this.tail = 5
+    this.z = 0;
+    this.tail = 5;
 
     // Setup the players facing each other
     switch(playerID) {
