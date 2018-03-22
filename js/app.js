@@ -1,4 +1,5 @@
 let players = [];
+let debugMode = 1;
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -119,6 +120,16 @@ function run() {
   animate();
 }
 
+function debug() {
+
+  document.addEventListener('keyup', onKeyPressUp, false);
+  let player = new Player(1, true, 'Tester', 1);
+  players.push(player);
+  scene = new Scene(players);
+
+  animate();
+}
+
 function onKeyPressUp(e) {
   let keyAction = keyActions[keys[e.keyCode]];
   if (keyAction && keyAction.enabled) {
@@ -215,7 +226,11 @@ function setMainPlayer(playerInfo) {
 }
 
 function startApp() {
-  login();
+  if (debugMode == 0) {
+    login();
+  } else {
+    debug();
+  }
 }
 
 startApp();
