@@ -1,4 +1,5 @@
 let players = [];
+let debugMode = 1;
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -119,6 +120,17 @@ function run() {
   animate();
 }
 
+function debug() {
+
+  document.addEventListener('keyup', onKeyPressUp, false);
+  let player = new Player(1, true, 'Tester', 1);
+  let player = new Player(2, false, 'Bot', 2);
+  players.push(player);
+  scene = new Scene(players);
+
+  animate();
+}
+
 function onKeyPressUp(e) {
   let keyAction = keyActions[keys[e.keyCode]];
   if (keyAction && keyAction.enabled) {
@@ -158,7 +170,7 @@ function login() {
  */
 function createOrJoinRoom() {
   let createRoom = prompt("Create room (1) or join room (0):");
-  if (createRoom === 1) {
+  if (createRoom === '1') {
     onCrateRoom();
   } else {
     onJoinRoom();
@@ -215,7 +227,11 @@ function setMainPlayer(playerInfo) {
 }
 
 function startApp() {
-  login();
+  if (debugMode == 0) {
+    login();
+  } else {
+    debug();
+  }
 }
 
 startApp();
