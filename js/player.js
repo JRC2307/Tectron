@@ -1,8 +1,9 @@
 class Player {
-
-  constructor(playerID, controllable) {
+  constructor(playerID, controllable, name, number) {
     this.playerID = playerID;
     this.controllable = controllable;
+    this.name = name;
+    this.number = number;
     this.isAlive = true;
     // this.host = false;
 
@@ -11,7 +12,7 @@ class Player {
     this.tail = 5;
 
     // Setup the players facing each other
-    switch(playerID) {
+    switch(number) {
       case 1:
         this.direction = 'north';
         this.x = 0;

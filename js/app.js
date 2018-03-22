@@ -79,13 +79,31 @@ function initGui() {
 
 }
 
-function initPlayers() {
-  players.push(new Player(1, true));
-  players.push(new Player(2, false));
-  players.push(new Player(3, false));
-  players.push(new Player(4, false));
-
-  return players;
+function initPlayers() { // WIP, not tested
+  // Get players changes in real time
+  getPlayersCollection()
+    .then( function(playersSnapshot) {
+      console.log("Players changed...");
+      playersSnapshot.forEach(function(playerDoc) {
+        // all players but the main player
+        if (doc.id !== mainPlayerID) {
+          console.log("Player: " + doc);
+          let player = players.filter(function(p){ return p.id === playerDoc.id });
+          // check if player was previously added
+          if (player === undefined) {
+            // player not found in array, add to array
+            player = new Player(playerDoc.id(), false, playerDoc.data().name, playerDoc.data().number);
+            players.push(player);
+          } else {
+            // player found in array, update value
+            /**
+             *  In this section, player info is updated in real time.
+             *  Player data located at: playerDoc.data();
+             */
+          }
+        }
+      });
+    });
 }
 
 function animate() {
@@ -95,7 +113,7 @@ function animate() {
 
 
 function run() {
-  players = initPlayers();
+  initPlayers();
   scene = new Scene(players);
 
   animate();
@@ -124,7 +142,6 @@ function login() {
       // User is signed in
       console.log( "Player is signed in " + user.uid);
       mainPlayerID = user.uid;
-      players.push(new Player(mainPlayerID, true));
       createOrJoinRoom();
     } else {
       // User is signed out
@@ -159,6 +176,7 @@ function onCrateRoom() {
     .then(function (playerInfo) {
       console.log("room created successfully.");
       console.log(playerInfo);
+      setMainPlayer(playerInfo);
     })
     .catch(function (error) {
       console.error("Error creating room.");
@@ -183,11 +201,17 @@ function onJoinRoom() {
     .then(function (playerInfo) {
       console.log("Joined room successfully.");
       console.log(playerInfo);
+      setMainPlayer(playerInfo);
     })
     .catch(function (error) {
       console.error("Error joining  room.");
       console.error(error);
     });
+}
+
+function setMainPlayer(playerInfo) {
+  players.push(new Player(mainPlayerID, true, playerInfo.name, playerInfo.number));
+  startGame();
 }
 
 function startApp() {
