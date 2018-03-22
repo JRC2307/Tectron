@@ -158,7 +158,7 @@ function login() {
  */
 function createOrJoinRoom() {
   let createRoom = prompt("Create room (1) or join room (0):");
-  if (createRoom === 1) {
+  if (createRoom === '1') {
     onCrateRoom();
   } else {
     onJoinRoom();
