@@ -12,7 +12,8 @@ let keys = {
   65: 'left', // A
   68: 'right', // D
   83: 'down', // S
-  32: 'spacebar' // spacebar
+  32: 'spacebar', // spacebar
+  77: 'menu' //menu
 }
 
 
@@ -76,7 +77,34 @@ function onWindowResize() {
 }
 
 function initGui() {
+  gui = new dat.GUI({
+    height : window.innerHeight,
+    width : window.innerWidth - 15
+  });
+  var buttonStartGame = {
+    add: function(){
+      players = initPlayers();
+      scene = new Scene(players);
+      gui.close();
+      hideMainSite();
+      animate();
+  }};
+  gui.add(buttonStartGame,'add').name('Start game');
+  var leaderBoard = {
+    add: function(){
+        //Display leaders
+  }};
+  gui.add(leaderBoard,'add').name('Display leaderboard');
 
+}
+
+function hideMainSite() {
+    var x = document.getElementById("mainSite");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
 }
 
 function initPlayers() {
@@ -97,10 +125,8 @@ function animate() {
 
 
 function run() {
-  players = initPlayers();
-  scene = new Scene(players);
+  initGui();
 
-  animate();
 }
 
 function onKeyPressUp(e) {
