@@ -1,5 +1,5 @@
 let players = [];
-let debugMode = 1;
+let debugMode = 0;
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -124,8 +124,9 @@ function debug() {
 
   document.addEventListener('keyup', onKeyPressUp, false);
   let player = new Player(1, true, 'Tester', 1);
-  let player = new Player(2, false, 'Bot', 2);
+  let player2 = new Player(2, false, 'Bot', 2);
   players.push(player);
+  players.push(player22);
   scene = new Scene(players);
 
   animate();
