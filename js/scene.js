@@ -1,60 +1,67 @@
-var camera1, miniMapCamera, scene, renderer, texture, groundPlane, gridHelper;
-var geometry, material, cube;
-var ambientLight, hemisphereLight;
-var parameters =
-    {
-        AmbientLight: true,
-        DirectionalLight: true
-    };
+class Scene {
 
-var window2 = {
-    x: window.innerWidth - (window.innerWidth/4) - 10,
-    y: 10,
-    width: (window.innerWidth/4),
-    height: (window.innerHeight/4)
-};
-var deltaRotation = 0;
+  constructor(players) {
 
-init();
-animate();
+    this.players = players
+    this.createFirstPersonCamera();
+    this.createMiniMapCamera();
 
-function init() {
+    this.scene = new THREE.Scene();
 
-    // Big scene
-    camera1 = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
-    camera1.position.set(-60,10,0);
+    let helper = new THREE.CameraHelper( this.miniMapCamera );
+    this.scene.add( helper );
 
-    // Small scene
-    miniMapCamera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
-    miniMapCamera.position.set(0, 50, 0);
+    for (var player of players) {
+      this.scene.add( player.model );
+    }
 
-    // Camera 1 Orientation
-    camera1.lookAt(new THREE.Vector3(0,0,0));
-    camera1.up = new THREE.Vector3(0,0,0);
+    this.createGroundPlane();
+    this.addLights();
 
-    // Camera 2 Orientation
-    miniMapCamera.lookAt(new THREE.Vector3(0,0,0));
-    miniMapCamera.up = new THREE.Vector3(0,0,0);
+    this.configureRenderer();
 
-    scene = new THREE.Scene();
-    // scene.background = new THREE.Color( 0xf0f0f0 );
+    document.body.appendChild( this.renderer.domElement );
+    window.addEventListener( 'resize', onWindowResize, false );
 
-    var helper = new THREE.CameraHelper( miniMapCamera );
-    scene.add( helper );
+  }
 
-    // cube
-    geometry = new THREE.BoxGeometry( 5, 5, 5 );
-    material = new THREE.MeshStandardMaterial({color: 0xfff000});
-    cube = new THREE.Mesh( geometry, material );
-    cube.position.set(0, 0, 0);
-    cube.castShadow = true; //default is false
-    cube.receiveShadow = true;
-    scene.add( cube );
+  createFirstPersonCamera() {
+    // firstPersonCamera initialization
+    this.firstPersonCamera = new THREE.PerspectiveCamera(
+      70,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      100
+    );
 
+    this.firstPersonCamera.position.set(-60, 10, 0);
+
+    this.firstPersonCamera.lookAt(new THREE.Vector3(0,0,0));
+    this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+  }
+
+
+  createMiniMapCamera() {
+    // miniMapCamera initialization
+    this.miniMapCamera = new THREE.PerspectiveCamera(
+      70,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      100
+    );
+
+    this.miniMapCamera.position.set(0, 50, 0);
+
+    this.miniMapCamera.lookAt(new THREE.Vector3(0,0,0));
+    this.miniMapCamera.up = new THREE.Vector3(0,0,0);
+  }
+
+
+  createGroundPlane() {
     // Comment the next 4 lines for textures:
-    groundPlane = new THREE.Mesh(
-        new THREE.PlaneGeometry( 80, 80 ),
-        new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
+    let groundPlane = new THREE.Mesh(
+      new THREE.PlaneGeometry( 80, 80 ),
+      new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
     );
 
     groundPlane.material.side = THREE.DoubleSide;
@@ -62,78 +69,72 @@ function init() {
     groundPlane.rotation.x = Math.PI / 2;
     groundPlane.castShadow = true; //default is false
     groundPlane.receiveShadow = true;
-    scene.add(groundPlane);
+    this.scene.add(groundPlane);
+  }
 
-    addLights();
 
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-    renderer.autoClear = false; // important!
-
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
-
-    window.addEventListener( 'resize', onWindowResize, false );
-
-    initGui();
-}
-
-function addLights() {
+  addLights() {
     // AmbientLight
-    ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 ); // soft white light
-    scene.add( ambientLight );
+    let ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 ); // soft white light
+    this.scene.add( ambientLight );
 
     // HemisphereLight
-    hemisphereLight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
-    scene.add(hemisphereLight);
-}
+    let hemisphereLight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+    this.scene.add(hemisphereLight);
+  }
 
-function onWindowResize() {
-    window2 = {
-        x: window.innerWidth - (window.innerWidth/4) - 10,
-        y: window.innerHeight - (window.innerHeight/4) - 10,
-        height: (window.innerWidth/4),
-        width: (window.innerHeight/4)
-    };
-    camera1.aspect = window.innerWidth / window.innerHeight;
-    camera1.updateProjectionMatrix();
-    miniMapCamera.aspect = window.innerWidth / window.innerHeight;
-    miniMapCamera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-}
+  configureRenderer() {
+    this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+    this.renderer.autoClear = false; // important!
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+  }
 
-function initGui() {
+  renderPlayers() {
+    for (var player of this.players) {
 
-}
+      if (player.controllable) {
 
-function animate() {
-    requestAnimationFrame( animate );
-    render();
-}
+        player.model.position.x += player.getXMovement();
+        player.model.position.z += player.getZMovement();
+
+        // Camera 1 Orientation
+        this.firstPersonCamera.position.set(
+          player.model.position.x,
+          player.model.position.y + 10,
+          player.model.position.z + 20
+        );
+
+        this.firstPersonCamera.lookAt(
+          player.model.position.x,
+          player.model.position.y -20,
+          player.model.position.z -20
+        );
+
+        this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+      } else {
+
+        // player.model.position.x = player.getXPosition();
+        // player.model.position.z = player.getZPosition();
+
+      }
+    }
+  }
 
 
-function render() {
-    deltaRotation += 0.01;
-    cube.position.x = Math.sin(deltaRotation) * 10;
-    cube.position.z = Math.cos(deltaRotation) * 10;
+  // This function could be refactored
+  render() {
 
-    cube.rotation.x += 0.005;
-    cube.rotation.y += 0.005;
-    cube.rotation.z += 0.005;
+    this.renderPlayers();
 
-    // Big scene
-    camera1.position.set(cube.position.x, cube.position.y + 10, cube.position.z + 20);
+    this.renderer.clear();
+    this.renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+    this.renderer.render( this.scene, this.firstPersonCamera );
 
-    // Camera 1 Orientation
-    camera1.lookAt(cube.position.x, cube.position.y -20, cube.position.z -20);
-    camera1.up = new THREE.Vector3(0,0,0);
+    this.renderer.clearDepth(); // important! clear the depth buffer
+    this.renderer.setViewport( displayWindow.x, displayWindow.y, displayWindow.width, displayWindow.height);
+    this.renderer.render( this.scene, this.miniMapCamera );
+  }
 
-    renderer.clear();
-    renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
-    renderer.render( scene, camera1 );
-
-    renderer.clearDepth(); // important! clear the depth buffer
-    renderer.setViewport( window2.x, window2.y, window2.width, window2.height);
-    renderer.render( scene, miniMapCamera );
 }
