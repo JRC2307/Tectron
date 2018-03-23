@@ -5,9 +5,9 @@ class Player {
     this.name = name;
     this.number = number;
     this.isAlive = true;
-    this.tail = [];
+    this.tail = [{ x: 0, z: 10 }];
 
-    this.speed = 0.2;
+    this.speed = 1;
 
     // Setup the players facing each other
     switch(number) {
@@ -44,12 +44,15 @@ class Player {
     return model;
   }
 
+  addTail() {
+    this.tail.push({ x: this.position.x, z: this.position.z});
+  }
+
   // addTail() {
     // let material2 = new THREE.MeshStandardMaterial({color: 0x00ff00});
     // let geometry = new THREE.BoxGeometry( 5, 5, 5 );
 
-    // let tail = new THREE.Mesh( geometry, material2);
-    // tail.position.set(this.position.x, 0, (this.z - 5));
+    // let tail = new THREE.Mesh( geometry, material2); // tail.position.set(this.position.x, 0, (this.z - 5));
     // this.model.add(tail);
 
 
@@ -100,8 +103,7 @@ class Player {
     this.position.x += this.getXMovement();
     this.position.z += this.getZMovement();
 
-    this.tail.push(this.position);
-    console.log(this.tail);
+    this.addTail();
 
     this.model.position.x = this.position.x
     this.model.position.z = this.position.z

@@ -60,7 +60,7 @@ class Scene {
   createGroundPlane() {
     // Comment the next 4 lines for textures:
     let groundPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry( 80, 80 ),
+      new THREE.PlaneGeometry( 10000, 10000 ),
       new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
     );
 
@@ -118,7 +118,24 @@ class Scene {
 
 
   renderPlayersTail() {
+    let material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+    let geometry = new THREE.BoxGeometry( 5, 5, 5);
 
+    for (var player of this.players) {
+      for (var i =0; i < player.tail.length; i++) {
+
+        var selectedObject = this.scene.getObjectByName(i.toString());
+        this.scene.remove( selectedObject );
+
+        let cube = new THREE.Mesh( geometry, material);
+        cube.position.set(player.tail[i].x, 0, player.tail[i].z);
+        cube.castShadow = true; //default is false
+        cube.receiveShadow = true;
+        cube.name = i.toString();
+        // console.log(cube.name, cube.position.x, cube.position.y, cube.position.z);
+        this.scene.add(cube);
+      }
+    }
   }
 
   updatePlayerModels(player) {
