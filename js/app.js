@@ -101,7 +101,7 @@ function initPlayers() {
           existingPlayer[0].setZPosition(playerDoc.data().z);
       }
 
-      console.log(playerDoc.id, playerDoc.data().name, playerDoc.data().x, playerDoc.data().y)
+      console.log(playerDoc.data().name, playerDoc.data().x, playerDoc.data().z)
     });
   });
 }
