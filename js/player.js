@@ -12,22 +12,22 @@ class Player {
     // Setup the players facing each other
     switch(number) {
       case 1:
-        this.direction = 'north';
+        this.direction = 90;
         this.x = 0;
         this.z = 10;
         break;
       case 2:
-        this.direction = 'south';
+        this.direction = 270;
         this.x = 0;
         this.z = -10;
         break;
       case 3:
-        this.direction = 'west';
+        this.direction = 180;
         this.x = 10;
         this.z = 0;
         break;
       case 4:
-        this.direction = 'east';
+        this.direction = 0;
         this.x = -10;
         this.z = 0;
         break;
@@ -60,9 +60,9 @@ class Player {
 
   getXMovement() {
     switch(this.direction) {
-      case 'east':
+      case 0:
         return this.speed;
-      case 'west':
+      case 180:
         return this.speed * -1;
       default:
         return 0;
@@ -71,9 +71,9 @@ class Player {
 
   getZMovement() {
     switch(this.direction) {
-      case 'north':
+      case 90:
         return this.speed * -1
-      case 'south':
+      case 270:
         return this.speed;
       default:
         return 0;
@@ -93,29 +93,29 @@ class Player {
       return
 
     switch(this.direction) {
-      case 'north':
+      case 90:
         if (newDirection == 'left')
-          this.direction = 'west';
+          this.direction = 180;
         else
-          this.direction = 'east';
+          this.direction = 0;
         break;
-      case 'east':
+      case 0:
         if (newDirection == 'left')
-          this.direction = 'north';
+          this.direction = 90;
         else
-          this.direction = 'south';
+          this.direction = 270;
         break;
-      case 'south':
+      case 270:
         if (newDirection == 'left')
-          this.direction = 'east';
+          this.direction = 0;
         else
-          this.direction = 'west';
+          this.direction = 180;
         break;
-      case 'west':
+      case 180:
         if (newDirection == 'left')
-          this.direction = 'south';
+          this.direction = 270;
         else
-          this.direction = 'north';
+          this.direction = 90;
         break;
     }
   }

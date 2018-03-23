@@ -135,9 +135,8 @@ function onCreateRoom() {
 }
 
 function onJoinRoom() {
-  // let key = prompt("Joining: Introduce the room key:");
-  // let key = document.getElementById('code').value;
-  let key = 'rTyhHg';
+  let key = document.getElementById('code').value;
+  // let key = 'rTyhHg';
   if(key === null || key.length !== 6) {
     alert("Invalid value. Try again");
     onJoinRoom();
