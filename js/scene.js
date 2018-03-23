@@ -121,6 +121,12 @@ class Scene {
     }
   }
 
+  updatePlayerModels(players) {
+    for (var player of players) {
+      this.scene.add( player.model );
+    }
+  }
+
 
   // This function could be refactored
   render() {

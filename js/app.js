@@ -85,21 +85,23 @@ function initPlayers() {
 
     playersSnapshot.forEach(function(playerDoc) {
 
+
       let existingPlayer = players.filter(
         player => player.playerID === playerDoc.data().playerID);
 
-      console.log('existingPlayer', existingPlayer);
 
       if (existingPlayer.length === 0 && playerDoc.id !== mainPlayerID) {
 
           player = new Player(playerDoc.id, false, playerDoc.data().name, playerDoc.data().number);
           players.push(player);
-          console.log('Player does not exist, created it:', player);
+          scene.updatePlayerModels(players);
+
       } else if (playerDoc.id !== mainPlayerID) {
-          console.log('Player exists:', existingPlayer[0]);
           existingPlayer[0].setXPosition(playerDoc.data().x);
           existingPlayer[0].setZPosition(playerDoc.data().z);
       }
+
+      console.log(playerDoc.id, playerDoc.data().name, playerDoc.data().x, playerDoc.data().y)
     });
   });
 }
@@ -111,8 +113,8 @@ function animate() {
 
 
 function run() {
-  initPlayers();
   scene = new Scene(players);
+  initPlayers();
 
   animate();
 }
