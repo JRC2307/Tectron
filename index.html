@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title>Tectron</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js"></script>
@@ -16,10 +19,38 @@
     <script>
         // login()
     </script>
+<body style="background-color:grey;text-align:center">
+<div class="container" style="text-align:center;">
+  <div id="mainSite">
+    <p style="text-align:center;"><img src="resources/tectron.png" alt="Tectron"></p>
+    <button onclick="hideMainSite('createRoom')" class="btn btn-primary btn-lg">Create new room</button>
+    <button onclick="hideMainSite('joinRoom')" class="btn btn-primary btn-lg">Join existing room</button>
+  </div>
 
-    <div id="mainSite">
-      <p style="text-align:center;"><img src="resources/tectron.jpg" alt="Tectron"></p>
+  <br/>
+
+  <div id="createRoom" style="display: none;">
+    <div class="form-group row">
+      <label for="usr">Name:</label>
+      <input type="text" class="form-control" id="usrcreate">
+      <br/>
+      <button onclick="hideMainSite('createRoom')" class="btn btn-success btn-block">Create</button>
     </div>
+  </div>
+
+  <div id="joinRoom" style="display: none;">
+    <div class="form-group row">
+      <label for="usr">Name:</label>
+      <input type="text" class="form-control" id="usrjoin">
+      <label for="code">Code:</label>
+      <input type="text" class="form-control" id="code">
+      <br/>
+      <button onclick="hideMainSite('createRoom')" class="btn btn-success btn-block">Join</button>
+    </div>
+  </div>
+
+</div>
+
 
     <script src="js/player.js"></script>
     <script src="js/world.js"></script>

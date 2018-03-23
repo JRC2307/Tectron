@@ -77,29 +77,31 @@ function onWindowResize() {
 }
 
 function initGui() {
-  gui = new dat.GUI({
-    height : window.innerHeight,
-    width : window.innerWidth - 15
-  });
-  var buttonStartGame = {
-    add: function(){
-      players = initPlayers();
-      scene = new Scene(players);
-      gui.close();
-      hideMainSite();
-      animate();
-  }};
-  gui.add(buttonStartGame,'add').name('Start game');
-  var leaderBoard = {
-    add: function(){
-        //Display leaders
-  }};
-  gui.add(leaderBoard,'add').name('Display leaderboard');
+  // gui = new dat.GUI({
+  //   height : window.innerHeight,
+  //   width : window.innerWidth - 15
+  // });
+  // var buttonStartGame = {
+  //   add: function(){
+  //     players = initPlayers();
+  //     scene = new Scene(players);
+  //     gui.close();
+  //     hideMainSite('mainSite');
+  //     animate();
+  // }};
+  // gui.add(buttonStartGame,'add').name('Start game');
+  // var leaderBoard = {
+  //   add: function(){
+  //       //Display leaders
+  // }};
+  // gui.add(leaderBoard,'add').name('Display leaderboard');
 
 }
 
-function hideMainSite() {
-    var x = document.getElementById("mainSite");
+function hideMainSite(elementid) {
+    var x = document.getElementById(elementid);
+    document.getElementById('joinRoom').style.display = "none";
+    document.getElementById('createRoom').style.display = "none";
     if (x.style.display === "none") {
         x.style.display = "block";
     } else {
@@ -137,5 +139,9 @@ function onKeyPressUp(e) {
 }
 
 document.addEventListener('keyup', onKeyPressUp, false);
+
+
+
+
 
 run();
