@@ -60,7 +60,7 @@ class Scene {
   createGroundPlane() {
     // Comment the next 4 lines for textures:
     let groundPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry( 10000, 10000 ),
+      new THREE.PlaneGeometry( 1000, 1000 ),
       new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
     );
 

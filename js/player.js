@@ -5,7 +5,7 @@ class Player {
     this.name = name;
     this.number = number;
     this.isAlive = true;
-    this.tail = [{ x: 0, z: 10 }];
+    this.tail = [];
 
     this.speed = 1;
 
@@ -49,32 +49,10 @@ class Player {
     this.tail.push({ x: this.position.x, z: this.position.z});
   }
 
-  // addTail() {
-    // let material2 = new THREE.MeshStandardMaterial({color: 0x00ff00});
-    // let geometry = new THREE.BoxGeometry( 5, 5, 5 );
-
-    // let tail = new THREE.Mesh( geometry, material2); // tail.position.set(this.position.x, 0, (this.z - 5));
-    // this.model.add(tail);
-
-
-    //create child cube mesh
-    // let cubeMesh = []
-    // cubeMesh[0] = new THREE.Mesh( geometry, material2);
-    // cubeMesh[1] = new THREE.Mesh( geometry, material2);
-    // cubeMesh[2] = new THREE.Mesh( geometry, material2);
-
-    // cubeMesh[0].position.set(this.x, 0, (this.z - 5));
-    // cubeMesh[1].position.set(this.x, 0, (this.z - 10));
-    // cubeMesh[2].position.set(this.x, 0, (this.z - 15));
-
-    //Add child cubes to the scene
-    // for (var i = 0; i < 3; i++)
-      // this.model.add(cubeMesh[i]);
-  // }
-  //
-  setPosition(x, z) {
-    this.model.position.x = x
-    this.model.position.z = z
+  setPosition(position) {
+    this.position = position
+    this.model.position.x = this.position.x
+    this.model.position.z = this.position.z
   }
 
   getXMovement() {
