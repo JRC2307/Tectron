@@ -116,6 +116,11 @@ class Scene {
     }
   }
 
+
+  renderPlayersTail() {
+
+  }
+
   updatePlayerModels(player) {
     this.scene.add( player.model );
     this.players.push(player);
@@ -126,6 +131,7 @@ class Scene {
   render() {
 
     this.renderPlayers();
+    this.renderPlayersTail();
 
     this.renderer.clear();
     this.renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
