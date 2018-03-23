@@ -80,29 +80,25 @@ function initGui() {
 
 }
 
-function initPlayers() { // WIP, not tested
-  // Get players changes in real time
+function initPlayers() {
   getPlayersCollection().onSnapshot(function(playersSnapshot) {
-    // console.log("Players changed...");
+
     playersSnapshot.forEach(function(playerDoc) {
 
-      console.log(playerDoc.data());
+      let existingPlayer = players.filter(
+        player => player.playerID === playerDoc.data().playerID);
 
-      if (playerDoc.id !== mainPlayerID) {
-        // console.log("Player: " + doc);
-        let player = players.filter(function(p){ return p.id === playerDoc.id });
+      console.log('existingPlayer', existingPlayer);
 
-        // check if player was previously added
+      if (existingPlayer.length === 0 && playerDoc.id !== mainPlayerID) {
 
-        if (player === undefined) {
-          // player not found in array, add to array
-          player = new Player(playerDoc.id(), false, playerDoc.data().name, playerDoc.data().number);
+          player = new Player(playerDoc.id, false, playerDoc.data().name, playerDoc.data().number);
           players.push(player);
-        } else {
-          // player.bark();
-          // player.setXPosition(playerDoc.data().x);
-          // player.setZPosition(playerDoc.data().z);
-        }
+          console.log('Player does not exist, created it:', player);
+      } else if (playerDoc.id !== mainPlayerID) {
+          console.log('Player exists:', existingPlayer[0]);
+          existingPlayer[0].setXPosition(playerDoc.data().x);
+          existingPlayer[0].setZPosition(playerDoc.data().z);
       }
     });
   });
@@ -200,7 +196,8 @@ function onCrateRoom() {
 }
 
 function onJoinRoom() {
-  let key = prompt("Joining: Introduce the room key:");
+  // let key = prompt("Joining: Introduce the room key:");
+  let key = 'RMdXbV'
   if(key === null || key.length !== 6) {
     alert("Invalid value. Try again");
     onJoinRoom();
