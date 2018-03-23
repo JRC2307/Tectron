@@ -121,10 +121,8 @@ class Scene {
     }
   }
 
-  updatePlayerModels(players) {
-    for (var player of players) {
-      this.scene.add( player.model );
-    }
+  updatePlayerModels(player) {
+    this.scene.add( player.model );
   }
 
 

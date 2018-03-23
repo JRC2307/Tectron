@@ -94,7 +94,7 @@ function initPlayers() {
 
           player = new Player(playerDoc.id, false, playerDoc.data().name, playerDoc.data().number);
           players.push(player);
-          scene.updatePlayerModels(players);
+          scene.updatePlayerModels(player);
 
       } else if (playerDoc.id !== mainPlayerID) {
           existingPlayer[0].setXPosition(playerDoc.data().x);
