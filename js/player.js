@@ -85,9 +85,6 @@ class Player {
     this.model.position.x = this.x
     this.model.position.z = this.z
 
-    let updatedPlayer = Object.assign({}, this);
-    delete updatedPlayer.model;
-    updateCurrentPlayerDocument(updatedPlayer);
   }
 
   changeDirection(newDirection) {

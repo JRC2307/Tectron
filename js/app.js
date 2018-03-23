@@ -1,5 +1,5 @@
 let players = [];
-let debugMode = 0;
+let debugMode = 1;
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -83,25 +83,29 @@ function initGui() {
 function initPlayers() { // WIP, not tested
   // Get players changes in real time
   getPlayersCollection().onSnapshot(function(playersSnapshot) {
-      // console.log("Players changed...");
-      playersSnapshot.forEach(function(playerDoc) {
+    // console.log("Players changed...");
+    playersSnapshot.forEach(function(playerDoc) {
 
-        if (playerDoc.id !== mainPlayerID) {
-          // console.log("Player: " + doc);
-          let player = players.filter(function(p){ return p.id === playerDoc.id });
-          // check if player was previously added
+      console.log(playerDoc.data());
 
-          if (player === undefined) {
-            // player not found in array, add to array
-            player = new Player(playerDoc.id(), false, playerDoc.data().name, playerDoc.data().number);
-            players.push(player);
-          } else {
-            player.setXPosition(playerDoc.data().x);
-            player.setXPosition(playerDoc.data().z);
-          }
+      if (playerDoc.id !== mainPlayerID) {
+        // console.log("Player: " + doc);
+        let player = players.filter(function(p){ return p.id === playerDoc.id });
+
+        // check if player was previously added
+
+        if (player === undefined) {
+          // player not found in array, add to array
+          player = new Player(playerDoc.id(), false, playerDoc.data().name, playerDoc.data().number);
+          players.push(player);
+        } else {
+          // player.bark();
+          // player.setXPosition(playerDoc.data().x);
+          // player.setZPosition(playerDoc.data().z);
         }
-      });
+      }
     });
+  });
 }
 
 function animate() {
@@ -117,17 +121,6 @@ function run() {
   animate();
 }
 
-function debug() {
-
-  document.addEventListener('keyup', onKeyPressUp, false);
-  let player = new Player(1, true, 'Tester', 1);
-  let player2 = new Player(2, false, 'Bot', 2);
-  players.push(player);
-  players.push(player2);
-  scene = new Scene(players);
-
-  animate();
-}
 
 function onKeyPressUp(e) {
   let keyAction = keyActions[keys[e.keyCode]];
@@ -136,9 +129,21 @@ function onKeyPressUp(e) {
   }
 }
 
-function startGame() {
+function startGame(player) {
   document.addEventListener('keyup', onKeyPressUp, false);
   run();
+  ticker(player);
+}
+
+async function ticker(player) {
+
+  while (true) {
+    await sleep(1000);
+    let updatedPlayer = Object.assign({}, player);
+    delete updatedPlayer.model;
+    updateCurrentPlayerDocument(updatedPlayer);
+    console.log('Updated position');
+  }
 }
 
 // Main app configurations:
@@ -220,16 +225,13 @@ function onJoinRoom() {
 }
 
 function setMainPlayer(playerInfo) {
-  players.push(new Player(mainPlayerID, true, playerInfo.name, playerInfo.number));
-  startGame();
+  mainPlayer = new Player(mainPlayerID, true, playerInfo.name, playerInfo.number);
+  players.push(mainPlayer);
+  startGame(mainPlayer);
 }
 
 function startApp() {
-  if (debugMode == 0) {
-    login();
-  } else {
-    debug();
-  }
+  login();
 }
 
 startApp();

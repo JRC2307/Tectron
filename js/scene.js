@@ -96,8 +96,6 @@ class Scene {
 
       if (player.controllable) {
 
-        // player.model.position.x += player.getXMovement();
-        // player.model.position.z += player.getZMovement();
         player.updatePlayerPosition();
 
         // Camera 1 Orientation
