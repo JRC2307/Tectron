@@ -76,7 +76,7 @@ async function joinRoom(roomKey, playerName) {
     .then(async function(roomQuerySnapshot) {
       if (roomQuerySnapshot.size > 0) {
         var roomDoc = roomQuerySnapshot.docs[0];
-        console.log(roomDoc.id, " => ", roomDoc.data());
+        // console.log(roomDoc.id, " => ", roomDoc.data());
         roomID = roomDoc.id;
         // Query room players to assign player number
         return await db.collection("rooms/"+roomID+"/players")

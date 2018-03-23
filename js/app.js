@@ -25,38 +25,46 @@ function onWindowResize() {
 }
 
 function hideMainSite(elementid) {
-    var x = document.getElementById(elementid);
-    document.getElementById('joinRoom').style.display = "none";
-    document.getElementById('createRoom').style.display = "none";
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
+  var x = document.getElementById(elementid);
+  document.getElementById('joinRoom').style.display = "none";
+  document.getElementById('createRoom').style.display = "none";
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
 }
 
-function initPlayers() {
+
+function subscribeFirebase() {
   getPlayersCollection().onSnapshot(function(playersSnapshot) {
 
-    playersSnapshot.forEach(function(playerDoc) {
-
+    console.log(' --- Snapshot --- ');
+    playersSnapshot.forEach(function(firebasePlayer) {
 
       let existingPlayer = players.filter(
-        player => player.playerID === playerDoc.data().playerID);
+        player => player.id === firebasePlayer.data().id);
 
+      if (existingPlayer.length === 0 && firebasePlayer.id !== mainPlayerID) {
 
-      if (existingPlayer.length === 0 && playerDoc.id !== mainPlayerID) {
+        player = new Player(
+          firebasePlayer.id,
+          false,
+          firebasePlayer.data().name,
+          firebasePlayer.data().number
+        );
 
-          player = new Player(playerDoc.id, false, playerDoc.data().name, playerDoc.data().number);
-          players.push(player);
-          scene.updatePlayerModels(player);
-
-      } else if (playerDoc.id !== mainPlayerID) {
-          existingPlayer[0].setXPosition(playerDoc.data().x);
-          existingPlayer[0].setZPosition(playerDoc.data().z);
+        players.push(player);
+        scene.updatePlayerModels(player);
       }
 
-      console.log(playerDoc.data().name, playerDoc.data().x, playerDoc.data().z)
+      players.forEach(function(player) {
+        if (player.id !== mainPlayerID && player.id === firebasePlayer.id) {
+          player.setXPosition(firebasePlayer.data().x);
+          player.setZPosition(firebasePlayer.data().z);
+        }
+        console.log(player.name, player.x, player.z);
+      });
     });
   });
 }
@@ -69,7 +77,7 @@ function animate() {
 
 function run() {
   scene = new Scene(players);
-  initPlayers();
+  subscribeFirebase();
   animate();
 }
 
@@ -87,15 +95,9 @@ async function ticker(player) {
     let updatedPlayer = Object.assign({}, player);
     delete updatedPlayer.model;
     updateCurrentPlayerDocument(updatedPlayer);
-    console.log('Updated position');
   }
 }
 
-// Main app configurations:
-
-/**
- * Function to log the user in (if not logged in yet) and send flow to let the user create or join a room.
- */
 function login() {
   firebase.auth().onAuthStateChanged(function( user ) {
     if ( user ) {
@@ -111,18 +113,6 @@ function login() {
     }
   });
 }
-
-/**
- * Function for the user to decide to join a room or create one.
- */
-// function createOrJoinRoom() {
-//   let createRoom = prompt("Create room (1) or join room (0):");
-//   if (createRoom === '1') {
-//     onCreateRoom();
-//   } else {
-//     onJoinRoom();
-//   }
-// }
 
 function onCreateRoom() {
   let playerName = document.getElementById('usrcreate').value;
@@ -146,7 +136,8 @@ function onCreateRoom() {
 
 function onJoinRoom() {
   // let key = prompt("Joining: Introduce the room key:");
-  let key = document.getElementById('code').value;
+  // let key = document.getElementById('code').value;
+  let key = 'rTyhHg';
   if(key === null || key.length !== 6) {
     alert("Invalid value. Try again");
     onJoinRoom();

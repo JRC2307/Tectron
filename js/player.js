@@ -1,13 +1,13 @@
 class Player {
-  constructor(playerID, controllable, name, number) {
-    this.playerID = playerID;
+  constructor(id, controllable, name, number) {
+    this.id = id;
     this.controllable = controllable;
     this.name = name;
     this.number = number;
     this.isAlive = true;
     // this.host = false;
 
-    this.speed = 0.4;
+    this.speed = 0.2;
     this.tail = 5;
 
     // Setup the players facing each other
@@ -50,11 +50,13 @@ class Player {
   }
 
   setXPosition(x) {
-    self.x = x;
+    this.x = x;
+    this.model.position.x = this.x
   }
 
   setZPosition(z) {
-    self.z = z;
+    this.z = z;
+    this.model.position.z = this.z
   }
 
   getXMovement() {

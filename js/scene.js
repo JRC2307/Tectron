@@ -94,9 +94,9 @@ class Scene {
   renderPlayers() {
     for (var player of this.players) {
 
-      player.updatePlayerPosition();
-
       if (player.controllable) {
+
+        player.updatePlayerPosition();
 
         // Camera 1 Orientation
         this.firstPersonCamera.position.set(
