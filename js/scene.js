@@ -118,6 +118,7 @@ class Scene {
 
   updatePlayerModels(player) {
     this.scene.add( player.model );
+    this.players.push(player);
   }
 
 
