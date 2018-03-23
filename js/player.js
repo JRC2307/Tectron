@@ -5,7 +5,6 @@ class Player {
     this.name = name;
     this.number = number;
     this.isAlive = true;
-    // this.host = false;
 
     this.speed = 0.2;
     this.tail = 5;
