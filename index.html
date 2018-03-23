@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--<meta http-equiv="Access-Control-Allow-Origin" content="https://firestore.googleapis.com">-->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="Access-Control-Allow-Origin" value = "*">
+    <header name="Access-Control-Allow-Origin" value = "*"></header>
   </head>
   <body>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js"></script>
@@ -19,9 +23,10 @@
     <script>
         // login()
     </script>
-<body style="background-color:grey;text-align:center">
-<div class="container" style="text-align:center;">
-  <div id="mainSite">
+
+<div id="mainSite" class="container" style="text-align:center;">
+  <body style="background-color:grey;text-align:center">
+  <div >
     <p style="text-align:center;"><img src="resources/tectron.png" alt="Tectron"></p>
     <button onclick="hideMainSite('createRoom')" class="btn btn-primary btn-lg">Create new room</button>
     <button onclick="hideMainSite('joinRoom')" class="btn btn-primary btn-lg">Join existing room</button>
@@ -34,7 +39,7 @@
       <label for="usr">Name:</label>
       <input type="text" class="form-control" id="usrcreate">
       <br/>
-      <button onclick="hideMainSite('createRoom')" class="btn btn-success btn-block">Create</button>
+      <button onclick="onCrateRoom()" class="btn btn-success btn-block">Create</button>
     </div>
   </div>
 
@@ -45,13 +50,14 @@
       <label for="code">Code:</label>
       <input type="text" class="form-control" id="code">
       <br/>
-      <button onclick="hideMainSite('createRoom')" class="btn btn-success btn-block">Join</button>
+      <button onclick="onJoinRoom()" class="btn btn-success btn-block">Join</button>
     </div>
   </div>
 
 </div>
 
 
+    <script src="js/utils.js"></script>
     <script src="js/player.js"></script>
     <script src="js/world.js"></script>
     <script src="js/scene.js"></script>

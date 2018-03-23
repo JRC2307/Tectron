@@ -94,10 +94,9 @@ class Scene {
   renderPlayers() {
     for (var player of this.players) {
 
-      if (player.controllable) {
+      player.updatePlayerPosition();
 
-        player.model.position.x += player.getXMovement();
-        player.model.position.z += player.getZMovement();
+      if (player.controllable) {
 
         // Camera 1 Orientation
         this.firstPersonCamera.position.set(
@@ -113,13 +112,13 @@ class Scene {
         );
 
         this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
-      } else {
-
-        // player.model.position.x = player.getXPosition();
-        // player.model.position.z = player.getZPosition();
-
       }
     }
+  }
+
+  updatePlayerModels(player) {
+    this.scene.add( player.model );
+    this.players.push(player);
   }
 
 

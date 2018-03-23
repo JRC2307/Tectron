@@ -1,16 +1,17 @@
 class Player {
-
-  constructor(playerID, controllable) {
+  constructor(playerID, controllable, name, number) {
     this.playerID = playerID;
     this.controllable = controllable;
+    this.name = name;
+    this.number = number;
     this.isAlive = true;
+    // this.host = false;
 
     this.speed = 0.4;
-    this.z = 0
-    this.tail = 5
+    this.tail = 5;
 
     // Setup the players facing each other
-    switch(playerID) {
+    switch(number) {
       case 1:
         this.direction = 'north';
         this.x = 0;
@@ -48,24 +49,12 @@ class Player {
     return model
   }
 
-  getXPosition() {
-    // Firebase func here
-    return 1
-  }
-
-  getZPosition() {
-    // Firebase func here
-    return 1
-  }
-
   setXPosition(x) {
-    // Firebase func here
-    //
+    self.x = x;
   }
 
   setZPosition(z) {
-    // Firebase func here
-    // this.z = z
+    self.z = z;
   }
 
   getXMovement() {
@@ -90,6 +79,13 @@ class Player {
     }
   }
 
+  updatePlayerPosition() {
+    this.x += this.getXMovement();
+    this.z += this.getZMovement();
+    this.model.position.x = this.x
+    this.model.position.z = this.z
+
+  }
 
   changeDirection(newDirection) {
     if (!this.controllable)
