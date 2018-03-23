@@ -40,6 +40,7 @@ class Player {
     model.position.set(this.position.x, 0, this.position.z);
     model.castShadow = true; //default is false
     model.receiveShadow = true;
+    model.name = this.id
 
     return model;
   }

@@ -94,7 +94,7 @@ class Scene {
   renderPlayers() {
     for (var player of this.players) {
 
-      if (player.controllable) {
+      if (player.controllable && player.isAlive) {
 
         player.updatePlayerPosition();
 
@@ -112,6 +112,10 @@ class Scene {
         );
 
         this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+      } else if (player.isAlive == false) {
+
+        var removedPlayer = this.scene.getObjectByName(player.id);
+        this.scene.remove( removedPlayer );
       }
     }
   }
@@ -122,18 +126,25 @@ class Scene {
     let geometry = new THREE.BoxGeometry( 5, 5, 5);
 
     for (var player of this.players) {
-      for (var i =0; i < player.tail.length; i++) {
 
-        var selectedObject = this.scene.getObjectByName(i.toString());
-        this.scene.remove( selectedObject );
+      for (var i = 0; i < player.tail.length; i++) {
 
-        let cube = new THREE.Mesh( geometry, material);
-        cube.position.set(player.tail[i].x, 0, player.tail[i].z);
-        cube.castShadow = true; //default is false
-        cube.receiveShadow = true;
-        cube.name = i.toString();
-        // console.log(cube.name, cube.position.x, cube.position.y, cube.position.z);
-        this.scene.add(cube);
+        // We need to remove the previous tail object, otherwhise we will render
+        // n ^ 2 tails.
+        var previousTail = this.scene.getObjectByName(i.toString());
+        this.scene.remove( previousTail );
+
+        if (player.isAlive) {
+          // Create a new tail object
+          let tail = new THREE.Mesh( geometry, material);
+          tail.position.set(player.tail[i].x, 0, player.tail[i].z);
+          tail.castShadow = true;
+          tail.receiveShadow = true;
+          tail.name = i.toString();
+
+          // Add tail to the scene
+          this.scene.add(tail);
+        }
       }
     }
   }
