@@ -117,7 +117,7 @@ function onCreateRoom() {
   let playerName = document.getElementById('usrcreate').value;
   if(playerName === null) {
     alert("Invalid value. Try again");
-    onCreateRoom()
+    // onCreateRoom()
   }
   console.log(playerName);
   createRoom(playerName)
@@ -138,13 +138,13 @@ function onJoinRoom() {
   // let key = 'rTyhHg';
   if(key === null || key.length !== 6) {
     alert("Invalid value. Try again");
-    onJoinRoom();
+    // onJoinRoom();
   }
   console.log(key);
   let playerName = document.getElementById('usrjoin').value;
   if(playerName === null) {
     alert("Invalid value. Try again");
-    onJoinRoom();
+    // onJoinRoom();
   }
   console.log(playerName);
   joinRoom(key, playerName)

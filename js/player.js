@@ -6,6 +6,7 @@ class Player {
     this.number = number;
     this.isAlive = true;
     this.tail = [];
+    this.tailDelay = 0;
 
     this.speed = 1;
 
@@ -82,7 +83,9 @@ class Player {
     this.position.x += this.getXMovement();
     this.position.z += this.getZMovement();
 
-    this.addTail();
+    this.tailDelay++;
+    if (!(this.tailDelay % 3))
+      this.addTail();
 
     this.model.position.x = this.position.x
     this.model.position.z = this.position.z
