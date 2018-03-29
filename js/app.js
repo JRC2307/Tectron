@@ -1,5 +1,5 @@
 let players = [];
-let debugMode = 1;
+let debugMode = 0;
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -167,7 +167,11 @@ function setMainPlayer(playerInfo) {
 }
 
 function startApp() {
-  login();
+  if (debugMode == 0) {
+    login();
+  } else {
+    debug();
+  }
 }
 
 startApp();

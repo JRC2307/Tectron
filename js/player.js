@@ -10,6 +10,9 @@ class Player {
 
     this.speed = 1;
 
+    this.onSelfCollision = function() {};
+    this.onTailCollision = function() {};
+
     // Setup the players facing each other
     switch(number) {
       case 1:
@@ -67,6 +70,7 @@ class Player {
     }
   }
 
+
   getZMovement() {
     switch(this.direction) {
       case 90:
@@ -123,6 +127,33 @@ class Player {
         break;
     }
   }
+  selfCollision() {
+    this.onSelfCollision();
+    this.clear();
+  }
+
+  tailCollision() {
+    this.onTailCollision();
+    this.addTail();//tailfunction
+  }
+  clear() {
+    this.axis = null;
+    this.direction = null;
+  }
+  setCurrentTailPosition(position) {
+      this.tail.position = position;
+    }
+  isHit(p1, p2) {
+      if (p1.x === p2.x && p1.y === p2.y && p1.z === p2.z) {
+        return true;
+      }
+      return false;
+    }
+  reset() {
+      this.init();
+    }
+
+
 
   bark() {
     console.log('Woof');
