@@ -1,12 +1,20 @@
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyBNqb5PRq4jNW6gHvxx2j8E1T8-FAnXGYE",
-  authDomain: "tectron111.firebaseapp.com",
-  databaseURL: "https://tectron111.firebaseio.com",
-  projectId: "tectron111",
-  storageBucket: "tectron111.appspot.com",
-  messagingSenderId: "1087328543626"
+  apiKey: "AIzaSyAl54cSjxziyWTg3ocge3AZM9-t4cEMEFo",
+  authDomain: "tectron-7251c.firebaseapp.com",
+  databaseURL: "https://tectron-7251c.firebaseio.com",
+  projectId: "tectron-7251c",
+  storageBucket: "",
+  messagingSenderId: "259684705582"
 };
+// var config = {
+// apiKey: "AIzaSyBNqb5PRq4jNW6gHvxx2j8E1T8-FAnXGYE",
+// authDomain: "tectron111.firebaseapp.com",
+// databaseURL: "https://tectron111.firebaseio.com",
+// projectId: "tectron111",
+// storageBucket: "tectron111.appspot.com",
+// messagingSenderId: "1087328543626"
+// };
 
 firebase.initializeApp(config);
 
@@ -68,7 +76,7 @@ async function joinRoom(roomKey, playerName) {
     .then(async function(roomQuerySnapshot) {
       if (roomQuerySnapshot.size > 0) {
         var roomDoc = roomQuerySnapshot.docs[0];
-        console.log(roomDoc.id, " => ", roomDoc.data());
+        // console.log(roomDoc.id, " => ", roomDoc.data());
         roomID = roomDoc.id;
         // Query room players to assign player number
         return await db.collection("rooms/"+roomID+"/players")
@@ -110,12 +118,12 @@ function getCurrentPlayerDocument() {
 
 // function receives a player object containing new position and orientation.
 function updateCurrentPlayerDocument(player) {
-  return db.collection("rooms/"+roomID+"/players/"+mainPlayerID).set(player);
+  return db.doc("rooms/"+roomID+"/players/"+mainPlayerID).set(player);
 }
 
 // fetch players collection, returns listener
 function getPlayersCollection() {
-  return db.collection("rooms/"+roomID+"/players").onSnapshot();
+  return db.collection("rooms/"+roomID+"/players");
 }
 
 // function receives a tail object containing: position, orientation and color.
@@ -125,5 +133,5 @@ function addCurrentPlayerTail(tail) {
 
 // fetch a players tail collection.
 function getPlayerTail(othermainPlayerID) {
-  return db.collection("rooms/"+roomID+"/players/"+othermainPlayerID+"/tails/").onSnapshot();
+  // return db.collection("rooms/"+roomID+"/players/"+othermainPlayerID+"/tails/").onSnapshot();
 }

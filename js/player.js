@@ -1,37 +1,32 @@
 class Player {
-  constructor(playerID, controllable, name, number) {
-    this.playerID = playerID;
+  constructor(id, controllable, name, number) {
+    this.id = id;
     this.controllable = controllable;
     this.name = name;
     this.number = number;
     this.isAlive = true;
-    // this.host = false;
+    this.tail = [];
+    this.tailDelay = 0;
 
-    this.speed = 0.4;
-    this.z = 0;
-    this.tail = 5;
+    this.speed = 1;
 
     // Setup the players facing each other
     switch(number) {
       case 1:
-        this.direction = 'north';
-        this.x = 0;
-        this.z = 10;
+        this.direction = 90;
+        this.position = { x: 0, z: 10 };
         break;
       case 2:
-        this.direction = 'south';
-        this.x = 0;
-        this.z = -10;
+        this.direction = 270;
+        this.position = { x: 0, z: -10 };
         break;
       case 3:
-        this.direction = 'west';
-        this.x = 10;
-        this.z = 0;
+        this.direction = 180;
+        this.position = { x: 10, z: 10 };
         break;
       case 4:
-        this.direction = 'east';
-        this.x = -10;
-        this.z = 0;
+        this.direction = 0;
+        this.position = { x: -10, z: 0 };
         break;
     }
 
@@ -39,42 +34,33 @@ class Player {
   }
 
   initPlayerModel() {
-    let geometry = new THREE.BoxGeometry( 5, 5, this.tail );
+    let geometry = new THREE.BoxGeometry( 5, 5, 5 );
     let material = new THREE.MeshStandardMaterial({color: 0xffff00});
     let model = new THREE.Mesh( geometry, material );
 
-    model.position.set(this.x, 0, this.z);
+    model.position.set(this.position.x, 0, this.position.z);
     model.castShadow = true; //default is false
     model.receiveShadow = true;
+    model.name = this.id
 
-    return model
+    return model;
   }
 
-  getXPosition() {
-    // Firebase func here
-    return 1
+  addTail() {
+    this.tail.push({ x: this.position.x, z: this.position.z});
   }
 
-  getZPosition() {
-    // Firebase func here
-    return 1
-  }
-
-  setXPosition(x) {
-    // Firebase func here
-    //
-  }
-
-  setZPosition(z) {
-    // Firebase func here
-    // this.z = z
+  setPosition(position) {
+    this.position = position
+    this.model.position.x = this.position.x
+    this.model.position.z = this.position.z
   }
 
   getXMovement() {
     switch(this.direction) {
-      case 'east':
+      case 0:
         return this.speed;
-      case 'west':
+      case 180:
         return this.speed * -1;
       default:
         return 0;
@@ -83,44 +69,57 @@ class Player {
 
   getZMovement() {
     switch(this.direction) {
-      case 'north':
+      case 90:
         return this.speed * -1
-      case 'south':
+      case 270:
         return this.speed;
       default:
         return 0;
     }
   }
 
+  updatePlayerPosition() {
+
+    this.position.x += this.getXMovement();
+    this.position.z += this.getZMovement();
+
+    this.tailDelay++;
+    if (!(this.tailDelay % 3))
+      this.addTail();
+
+    this.model.position.x = this.position.x
+    this.model.position.z = this.position.z
+
+  }
 
   changeDirection(newDirection) {
     if (!this.controllable)
       return
 
     switch(this.direction) {
-      case 'north':
+      case 90:
         if (newDirection == 'left')
-          this.direction = 'west';
+          this.direction = 180;
         else
-          this.direction = 'east';
+          this.direction = 0;
         break;
-      case 'east':
+      case 0:
         if (newDirection == 'left')
-          this.direction = 'north';
+          this.direction = 90;
         else
-          this.direction = 'south';
+          this.direction = 270;
         break;
-      case 'south':
+      case 270:
         if (newDirection == 'left')
-          this.direction = 'east';
+          this.direction = 0;
         else
-          this.direction = 'west';
+          this.direction = 180;
         break;
-      case 'west':
+      case 180:
         if (newDirection == 'left')
-          this.direction = 'south';
+          this.direction = 270;
         else
-          this.direction = 'north';
+          this.direction = 90;
         break;
     }
   }

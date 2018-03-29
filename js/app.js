@@ -8,58 +8,6 @@ let displayWindow = {
   height: (window.innerHeight/4)
 };
 
-let keys = {
-  87: 'up', // W
-  65: 'left', // A
-  68: 'right', // D
-  83: 'down', // S
-  32: 'spacebar' // spacebar
-}
-
-
-var keyActions = {
-  'up': {
-    enabled: true,
-    action: function() {
-      // keyActions.backward.enabled = false;
-    }
-  },
-  'left': {
-    enabled: true,
-    action: function() {
-      for (var player of players) {
-        player.changeDirection('left');
-      }
-      // player.forward();
-      // keyActions.backward.enabled = false;
-    }
-  },
-  'right': {
-    enabled: true,
-    action: function() {
-      for (var player of players) {
-        player.changeDirection('right');
-      }
-      // player.forward();
-      // keyActions.backward.enabled = false;
-    }
-  },
-  'down': {
-    enabled: true,
-    action: function(){
-      // player.forward();
-      // keyActions.backward.enabled = false;
-    }
-  },
-  'spacebar': {
-    enabled: false,
-    action: function() {
-      // player.forward();
-      // keyActions.backward.enabled = false;
-    }
-  }
-};
-
 let deltaRotation = 0;
 
 function onWindowResize() {
@@ -76,35 +24,48 @@ function onWindowResize() {
   scene.renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-function initGui() {
-
+function hideMainSite(elementid) {
+  var x = document.getElementById(elementid);
+  document.getElementById('joinRoom').style.display = "none";
+  document.getElementById('createRoom').style.display = "none";
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
 }
 
-function initPlayers() { // WIP, not tested
-  // Get players changes in real time
-  getPlayersCollection()
-    .then( function(playersSnapshot) {
-      console.log("Players changed...");
-      playersSnapshot.forEach(function(playerDoc) {
-        // all players but the main player
-        if (doc.id !== mainPlayerID) {
-          console.log("Player: " + doc);
-          let player = players.filter(function(p){ return p.id === playerDoc.id });
-          // check if player was previously added
-          if (player === undefined) {
-            // player not found in array, add to array
-            player = new Player(playerDoc.id(), false, playerDoc.data().name, playerDoc.data().number);
-            players.push(player);
-          } else {
-            // player found in array, update value
-            /**
-             *  In this section, player info is updated in real time.
-             *  Player data located at: playerDoc.data();
-             */
-          }
+
+function subscribeFirebase() {
+  getPlayersCollection().onSnapshot(function(playersSnapshot) {
+
+    console.log(' --- Snapshot --- ');
+    playersSnapshot.forEach(function(firebasePlayer) {
+
+      let existingPlayer = players.filter(
+        player => player.id === firebasePlayer.data().id);
+
+      if (existingPlayer.length === 0 && firebasePlayer.id !== mainPlayerID) {
+
+        player = new Player(
+          firebasePlayer.id,
+          false,
+          firebasePlayer.data().name,
+          firebasePlayer.data().number
+        );
+
+        players.push(player);
+        scene.updatePlayerModels(player);
+      }
+
+      players.forEach(function(player) {
+        if (player.id !== mainPlayerID && player.id === firebasePlayer.id) {
+          player.setPosition(firebasePlayer.data().position);
         }
+        console.log(player.name, player.position.x, player.position.z);
       });
     });
+  });
 }
 
 function animate() {
@@ -114,47 +75,34 @@ function animate() {
 
 
 function run() {
-  initPlayers();
   scene = new Scene(players);
-
+  subscribeFirebase();
   animate();
 }
 
-function debug() {
 
+function startGame(player) {
   document.addEventListener('keyup', onKeyPressUp, false);
-  let player = new Player(1, true, 'Tester', 1);
-  let player = new Player(2, false, 'Bot', 2);
-  players.push(player);
-  scene = new Scene(players);
-
-  animate();
+  run();
+  ticker(player);
 }
 
-function onKeyPressUp(e) {
-  let keyAction = keyActions[keys[e.keyCode]];
-  if (keyAction && keyAction.enabled) {
-    keyAction.action();
+async function ticker(player) {
+
+  while (true) {
+    await sleep(250);
+    let updatedPlayer = Object.assign({}, player);
+    delete updatedPlayer.model;
+    updateCurrentPlayerDocument(updatedPlayer);
   }
 }
 
-function startGame() {
-  document.addEventListener('keyup', onKeyPressUp, false);
-  run();
-}
-
-// Main app configurations:
-
-/**
- * Function to log the user in (if not logged in yet) and send flow to let the user create or join a room.
- */
 function login() {
   firebase.auth().onAuthStateChanged(function( user ) {
     if ( user ) {
       // User is signed in
       console.log( "Player is signed in " + user.uid);
       mainPlayerID = user.uid;
-      createOrJoinRoom();
     } else {
       // User is signed out
       console.log( "Player is signed out " );
@@ -165,23 +113,11 @@ function login() {
   });
 }
 
-/**
- * Function for the user to decide to join a room or create one.
- */
-function createOrJoinRoom() {
-  let createRoom = prompt("Create room (1) or join room (0):");
-  if (createRoom === '1') {
-    onCrateRoom();
-  } else {
-    onJoinRoom();
-  }
-}
-
-function onCrateRoom() {
-  let playerName = prompt("Creating: Introduce your player name:");
+function onCreateRoom() {
+  let playerName = document.getElementById('usrcreate').value;
   if(playerName === null) {
     alert("Invalid value. Try again");
-    onCrateRoom()
+    // onCreateRoom()
   }
   console.log(playerName);
   createRoom(playerName)
@@ -189,6 +125,7 @@ function onCrateRoom() {
       console.log("room created successfully.");
       console.log(playerInfo);
       setMainPlayer(playerInfo);
+      hideMainSite('mainSite');
     })
     .catch(function (error) {
       console.error("Error creating room.");
@@ -197,20 +134,22 @@ function onCrateRoom() {
 }
 
 function onJoinRoom() {
-  let key = prompt("Joining: Introduce the room key:");
+  let key = document.getElementById('code').value;
+  // let key = 'rTyhHg';
   if(key === null || key.length !== 6) {
     alert("Invalid value. Try again");
-    onJoinRoom();
+    // onJoinRoom();
   }
   console.log(key);
-  let playerName = prompt("Introduce your player name:");
+  let playerName = document.getElementById('usrjoin').value;
   if(playerName === null) {
     alert("Invalid value. Try again");
-    onJoinRoom();
+    // onJoinRoom();
   }
   console.log(playerName);
   joinRoom(key, playerName)
     .then(function (playerInfo) {
+      hideMainSite('mainSite');
       console.log("Joined room successfully.");
       console.log(playerInfo);
       setMainPlayer(playerInfo);
@@ -222,16 +161,13 @@ function onJoinRoom() {
 }
 
 function setMainPlayer(playerInfo) {
-  players.push(new Player(mainPlayerID, true, playerInfo.name, playerInfo.number));
-  startGame();
+  mainPlayer = new Player(mainPlayerID, true, playerInfo.name, playerInfo.number);
+  players.push(mainPlayer);
+  startGame(mainPlayer);
 }
 
 function startApp() {
-  if (debugMode == 0) {
-    login();
-  } else {
-    debug();
-  }
+  login();
 }
 
 startApp();

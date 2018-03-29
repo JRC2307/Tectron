@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>Tectron</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!--<meta http-equiv="Access-Control-Allow-Origin" content="https://firestore.googleapis.com">-->
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <meta name="Access-Control-Allow-Origin" value = "*">
@@ -19,9 +23,45 @@
     <script>
         // login()
     </script>
+
+<div id="mainSite" class="container" style="text-align:center;">
+  <body style="background-color:grey;text-align:center">
+  <div >
+    <p style="text-align:center;"><img src="resources/tectron.png" alt="Tectron"></p>
+    <button onclick="hideMainSite('createRoom')" class="btn btn-primary btn-lg">Create new room</button>
+    <button onclick="hideMainSite('joinRoom')" class="btn btn-primary btn-lg">Join existing room</button>
+  </div>
+
+  <br/>
+
+  <div id="createRoom" style="display: none;">
+    <div class="form-group row">
+      <label for="usr">Name:</label>
+      <input type="text" class="form-control" id="usrcreate">
+      <br/>
+      <button onclick="onCreateRoom()" class="btn btn-success btn-block">Create</button>
+    </div>
+  </div>
+
+  <div id="joinRoom" style="display: none;">
+    <div class="form-group row">
+      <label for="usr">Name:</label>
+      <input type="text" class="form-control" id="usrjoin">
+      <label for="code">Code:</label>
+      <input type="text" class="form-control" id="code">
+      <br/>
+      <button onclick="onJoinRoom()" class="btn btn-success btn-block">Join</button>
+    </div>
+  </div>
+
+</div>
+
+
+    <script src="js/utils.js"></script>
     <script src="js/player.js"></script>
     <script src="js/world.js"></script>
     <script src="js/scene.js"></script>
+    <script src="js/keys.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

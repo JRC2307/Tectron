@@ -60,7 +60,7 @@ class Scene {
   createGroundPlane() {
     // Comment the next 4 lines for textures:
     let groundPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry( 80, 80 ),
+      new THREE.PlaneGeometry( 1000, 1000 ),
       new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
     );
 
@@ -94,10 +94,9 @@ class Scene {
   renderPlayers() {
     for (var player of this.players) {
 
-      if (player.controllable) {
+      if (player.controllable && player.isAlive) {
 
-        player.model.position.x += player.getXMovement();
-        player.model.position.z += player.getZMovement();
+        player.updatePlayerPosition();
 
         // Camera 1 Orientation
         this.firstPersonCamera.position.set(
@@ -113,13 +112,66 @@ class Scene {
         );
 
         this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
-      } else {
+      } else if (player.isAlive == false) {
 
-        // player.model.position.x = player.getXPosition();
-        // player.model.position.z = player.getZPosition();
-
+        var removedPlayer = this.scene.getObjectByName(player.id);
+        this.scene.remove( removedPlayer );
       }
     }
+  }
+
+
+  renderPlayersTail() {
+    let material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+    let geometry = new THREE.BoxGeometry( 1, 5, 1);
+
+    for (var player of this.players) {
+      if (player.isAlive) {
+        // Create a new tail object
+        console.log(player.tail.length);
+        if (player.tail.length > 0){
+          let geometry;
+          if(player.direction === 180 || player.direction === 0){
+            geometry = new THREE.BoxGeometry( 3, 5, 0.5);
+          } else {
+            geometry = new THREE.BoxGeometry( 0.5, 5, 3);
+          }
+          let tail = new THREE.Mesh( geometry, material);
+          tail.position.set(player.tail[player.tail.length-1].x, 0, player.tail[player.tail.length-1].z);
+          tail.castShadow = true;
+          tail.receiveShadow = true;
+          // Add tail to the scene
+          this.scene.add(tail);
+          player.tail = [];
+        }
+      }
+
+
+      // for (var i = 0; i < player.tail.length; i++) {
+      //
+      //   // We need to remove the previous tail object, otherwhise we will render
+      //   // n ^ 2 tails.
+      //   var previousTail = this.scene.getObjectByName(i.toString());
+      //   this.scene.remove( previousTail );
+      //
+      //   if (player.isAlive) {
+      //     // Create a new tail object
+      //     let tail = new THREE.Mesh( geometry, material);
+      //     tail.position.set(player.tail[i].x, 0, player.tail[i].z);
+      //     tail.castShadow = true;
+      //     tail.receiveShadow = true;
+      //     tail.name = i.toString();
+      //
+      //     // Add tail to the scene
+      //     this.scene.add(tail);
+      //   }
+      // }
+    }
+  }
+
+  updatePlayerModels(player) {
+    this.scene.add( player.model );
+    this.players.push(player);
   }
 
 
@@ -127,6 +179,7 @@ class Scene {
   render() {
 
     this.renderPlayers();
+    this.renderPlayersTail();
 
     this.renderer.clear();
     this.renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
