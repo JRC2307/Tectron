@@ -91,27 +91,72 @@ class Scene {
     this.renderer.setSize( window.innerWidth, window.innerHeight );
   }
 
-  renderPlayers() {
-    for (var player of this.players) {
-
-      if (player.controllable && player.isAlive) {
-
-        player.updateMainPlayerPosition();
-
+  setFirstPersonCameraDirection(player){
+    switch(player.direction) {
+      case 0:
         // Camera 1 Orientation
         this.firstPersonCamera.position.set(
           player.model.position.x,
           player.model.position.y + 10,
           player.model.position.z + 20
         );
-
         this.firstPersonCamera.lookAt(
           player.model.position.x,
           player.model.position.y -20,
           player.model.position.z -20
         );
+        break;
+      case 90:
+        // Camera 1 Orientation
+        this.firstPersonCamera.position.set(
+          player.model.position.x,
+          player.model.position.y + 10,
+          player.model.position.z + 20
+        );
+        this.firstPersonCamera.lookAt(
+          player.model.position.x,
+          player.model.position.y -20,
+          player.model.position.z -20
+        );
+        break;
+      case 180:
+        // Camera 1 Orientation
+        this.firstPersonCamera.position.set(
+          player.model.position.x,
+          player.model.position.y + 10,
+          player.model.position.z + 20
+        );
+        this.firstPersonCamera.lookAt(
+          player.model.position.x,
+          player.model.position.y -20,
+          player.model.position.z -20
+        );
+        break;
+      case 270:
+        // Camera 1 Orientation
+        this.firstPersonCamera.position.set(
+          player.model.position.x,
+          player.model.position.y + 10,
+          player.model.position.z + 20
+        );
+        this.firstPersonCamera.lookAt(
+          player.model.position.x,
+          player.model.position.y -20,
+          player.model.position.z -20
+        );
+        break;
+    }
+    this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+  }
 
-        this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+  renderPlayers() {
+    for (var player of this.players) {
+
+      if (player.controllable && player.isAlive) {
+
+        player.updateMainPlayerPosition();
+        this.setFirstPersonCameraDirection(player);
+
       } else if (player.isAlive == false) {
 
         var removedPlayer = this.scene.getObjectByName(player.id);
@@ -126,7 +171,6 @@ class Scene {
     for (var player of this.players) {
       if (player.isAlive) {
         // Create a new tail object
-        console.log(player.tail.length);
         if (player.tail.length > 0){
           let geometry;
           if(player.controllable) {

@@ -94,7 +94,8 @@ function startGame(player) {
 async function ticker(player) {
 
   while (true) {
-    await sleep(150);
+    // await sleep(200);
+    await sleep(500);
     let updatedPlayer = Object.assign({}, player);
     delete updatedPlayer.model;
     updateCurrentPlayerDocument(updatedPlayer);
