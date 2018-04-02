@@ -28,6 +28,8 @@ function hideMainSite(elementid) {
   var x = document.getElementById(elementid);
   document.getElementById('joinRoom').style.display = "none";
   document.getElementById('createRoom').style.display = "none";
+  document.getElementById('roomKey').style.display = "none";
+  document.getElementById('playJoinRoom').style.display = "none";
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {
@@ -127,7 +129,8 @@ function onCreateRoom() {
       console.log("room created successfully.");
       console.log(playerInfo);
       setMainPlayer(playerInfo);
-      hideMainSite('mainSite');
+      hideMainSite('createRoom');
+      hideMainSite('roomKey');
     })
     .catch(function (error) {
       console.error("Error creating room.");
@@ -151,10 +154,10 @@ function onJoinRoom() {
   console.log(playerName);
   joinRoom(key, playerName)
     .then(function (playerInfo) {
-      hideMainSite('mainSite');
       console.log("Joined room successfully.");
       console.log(playerInfo);
       setMainPlayer(playerInfo);
+      hideMainSite('playJoinRoom');
     })
     .catch(function (error) {
       console.error("Error joining  room.");
@@ -162,9 +165,14 @@ function onJoinRoom() {
     });
 }
 
+var mainPlayer;
 function setMainPlayer(playerInfo) {
   mainPlayer = new Player(mainPlayerID, true, playerInfo.name, playerInfo.number);
   players.push(mainPlayer);
+}
+
+function playGame(){
+  hideMainSite('mainSite');
   startGame(mainPlayer);
 }
 
