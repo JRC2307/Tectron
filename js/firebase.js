@@ -37,6 +37,7 @@ async function createRoom(playerName) {
       roomID = roomDocRef.id;
       console.log("Room document written with ID: ", roomID);
       console.log("Room Key: ", roomKey);
+      document.getElementById("key").innerHTML = roomKey;
       // Add player as room host.
       var playerInfo = {
         id: mainPlayerID,
