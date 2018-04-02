@@ -123,8 +123,6 @@ class Scene {
 
   renderPlayersTail() {
     let material = new THREE.MeshStandardMaterial({color: 0x00ff00});
-    let geometry = new THREE.BoxGeometry( 1, 5, 1);
-
     for (var player of this.players) {
       if (player.isAlive) {
         // Create a new tail object
@@ -132,9 +130,9 @@ class Scene {
         if (player.tail.length > 0){
           let geometry;
           if(player.direction === 180 || player.direction === 0){
-            geometry = new THREE.BoxGeometry( 3, 5, 0.5);
+            geometry = new THREE.BoxGeometry( 3, 4, 0.5);
           } else {
-            geometry = new THREE.BoxGeometry( 0.5, 5, 3);
+            geometry = new THREE.BoxGeometry( 0.5, 4, 3);
           }
           let tail = new THREE.Mesh( geometry, material);
           tail.position.set(player.tail[player.tail.length-1].x, 0, player.tail[player.tail.length-1].z);
@@ -145,27 +143,6 @@ class Scene {
           player.tail = [];
         }
       }
-
-
-      // for (var i = 0; i < player.tail.length; i++) {
-      //
-      //   // We need to remove the previous tail object, otherwhise we will render
-      //   // n ^ 2 tails.
-      //   var previousTail = this.scene.getObjectByName(i.toString());
-      //   this.scene.remove( previousTail );
-      //
-      //   if (player.isAlive) {
-      //     // Create a new tail object
-      //     let tail = new THREE.Mesh( geometry, material);
-      //     tail.position.set(player.tail[i].x, 0, player.tail[i].z);
-      //     tail.castShadow = true;
-      //     tail.receiveShadow = true;
-      //     tail.name = i.toString();
-      //
-      //     // Add tail to the scene
-      //     this.scene.add(tail);
-      //   }
-      // }
     }
   }
 

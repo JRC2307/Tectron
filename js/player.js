@@ -84,7 +84,7 @@ class Player {
     this.position.z += this.getZMovement();
 
     this.tailDelay++;
-    if (!(this.tailDelay % 3))
+    if (!(this.tailDelay % 2))
       this.addTail();
 
     this.model.position.x = this.position.x
