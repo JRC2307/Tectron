@@ -181,9 +181,9 @@ class Scene {
             }
           } else {
             if(player.direction === 180 || player.direction === 0){
-              geometry = new THREE.BoxGeometry( 6, 4, 0.5);
+              geometry = new THREE.BoxGeometry( 10, 4, 0.5);
             } else {
-              geometry = new THREE.BoxGeometry( 0.5, 4, 6);
+              geometry = new THREE.BoxGeometry( 0.5, 4, 10);
             }
           }
           let tail = new THREE.Mesh( geometry, material);
