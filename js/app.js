@@ -60,7 +60,9 @@ function subscribeFirebasePlayersSnapshot() {
       players.forEach(function(player) {
         if (player.id !== mainPlayerID && player.id === firebasePlayer.id) {
           player.setPosition(firebasePlayer.data().position);
+          player.direction = firebasePlayer.data().direction;
           player.addTail();
+          player.controllable = false;
         }
         console.log(player.name, player.position.x, player.position.z);
       });

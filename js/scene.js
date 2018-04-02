@@ -129,10 +129,18 @@ class Scene {
         console.log(player.tail.length);
         if (player.tail.length > 0){
           let geometry;
-          if(player.direction === 180 || player.direction === 0){
-            geometry = new THREE.BoxGeometry( 3, 4, 0.5);
+          if(player.controllable) {
+            if(player.direction === 180 || player.direction === 0){
+              geometry = new THREE.BoxGeometry( 3, 4, 0.5);
+            } else {
+              geometry = new THREE.BoxGeometry( 0.5, 4, 3);
+            }
           } else {
-            geometry = new THREE.BoxGeometry( 0.5, 4, 3);
+            if(player.direction === 180 || player.direction === 0){
+              geometry = new THREE.BoxGeometry( 6, 4, 0.5);
+            } else {
+              geometry = new THREE.BoxGeometry( 0.5, 4, 6);
+            }
           }
           let tail = new THREE.Mesh( geometry, material);
           tail.position.set(player.tail[player.tail.length-1].x, 0, player.tail[player.tail.length-1].z);
