@@ -31,7 +31,7 @@ class Scene {
       70,
       window.innerWidth / window.innerHeight,
       0.01,
-      100
+      1000
     );
 
     this.firstPersonCamera.position.set(-60, 10, 0);
@@ -96,7 +96,7 @@ class Scene {
 
       if (player.controllable && player.isAlive) {
 
-        player.updatePlayerPosition();
+        player.updateMainPlayerPosition();
 
         // Camera 1 Orientation
         this.firstPersonCamera.position.set(
@@ -146,7 +146,7 @@ class Scene {
     }
   }
 
-  updatePlayerModels(player) {
+  addPlayerModels(player) {
     this.scene.add( player.model );
     this.players.push(player);
   }

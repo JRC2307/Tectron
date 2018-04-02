@@ -78,7 +78,7 @@ class Player {
     }
   }
 
-  updatePlayerPosition() {
+  updateMainPlayerPosition() {
 
     this.position.x += this.getXMovement();
     this.position.z += this.getZMovement();

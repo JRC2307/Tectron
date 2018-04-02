@@ -36,9 +36,8 @@ function hideMainSite(elementid) {
 }
 
 
-function subscribeFirebase() {
+function subscribeFirebasePlayersSnapshot() {
   getPlayersCollection().onSnapshot(function(playersSnapshot) {
-
     console.log(' --- Snapshot --- ');
     playersSnapshot.forEach(function(firebasePlayer) {
 
@@ -55,12 +54,13 @@ function subscribeFirebase() {
         );
 
         players.push(player);
-        scene.updatePlayerModels(player);
+        scene.addPlayerModels(player);
       }
 
       players.forEach(function(player) {
         if (player.id !== mainPlayerID && player.id === firebasePlayer.id) {
           player.setPosition(firebasePlayer.data().position);
+          player.addTail();
         }
         console.log(player.name, player.position.x, player.position.z);
       });
@@ -76,7 +76,7 @@ function animate() {
 
 function run() {
   scene = new Scene(players);
-  subscribeFirebase();
+  subscribeFirebasePlayersSnapshot();
   animate();
 }
 
