@@ -57,10 +57,10 @@ class Scene {
 
   createGroundPlane() {
     // Comment the next 4 lines for textures:
-    var texture = THREE.ImageUtils.loadTexture('resources/map.jpg');
+    var texture = THREE.ImageUtils.loadTexture('resources/floor.jpg');
     let groundPlane = new THREE.Mesh(
       new THREE.PlaneGeometry( 310, 160 ),
-      new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
+      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
 
     groundPlane.material.side = THREE.DoubleSide;
@@ -72,9 +72,10 @@ class Scene {
 
   createWalls(){
     // North
+    var texture = THREE.ImageUtils.loadTexture('resources/wall2.jpg');
     let northWall = new THREE.Mesh(
       new THREE.PlaneGeometry( 310, 10 ),
-      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
     northWall.material.side = THREE.DoubleSide;
     northWall.position.set(0, 0, -80);
@@ -84,7 +85,7 @@ class Scene {
     // South
     let southWall = new THREE.Mesh(
       new THREE.PlaneGeometry( 310, 10 ),
-      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
     southWall.material.side = THREE.DoubleSide;
     southWall.position.set(0, 0, 80);
@@ -94,7 +95,7 @@ class Scene {
     // East
     let eastWall = new THREE.Mesh(
       new THREE.PlaneGeometry( 160, 10 ),
-      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
     eastWall.material.side = THREE.DoubleSide;
     eastWall.position.set(155, 0, 0);
@@ -105,7 +106,7 @@ class Scene {
     // West
     let westWall = new THREE.Mesh(
       new THREE.PlaneGeometry( 160, 10 ),
-      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
     westWall.material.side = THREE.DoubleSide;
     westWall.position.set(-155, 0, 0);
