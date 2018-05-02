@@ -1,6 +1,15 @@
 <!DOCTYPE html>
+<style type="text/css">
+label:after {
+  content: ": ";
+}
+label {
+  background-color: black;
+}
+</style>
 <html>
   <head>
+    <body background="resources/floor.jpg">
     <meta charset="utf-8">
     <title>Tectron</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -38,7 +47,7 @@
 
   <div id="createRoom" style="display: none;">
     <div class="form-group row">
-      <label for="usr">Name:</label>
+      <label for="usr"><font color="white">Name:</font></label>
       <input type="text" class="form-control" id="usrcreate">
       <br/>
       <button onclick="onCreateRoom()" class="btn btn-success btn-block">Create</button>
@@ -46,7 +55,7 @@
   </div>
 
   <div id="roomKey" style="display: none;">
-    <label for="usr">Room code:<h3 id="key"></h3></label>
+    <label for="usr"><font color="white">Room code:</font><h3 id="key"></h3></label>
     <br/>
     <button onclick="playGame()" class="btn btn-success btn-block">Play</button>
   </div>
@@ -54,9 +63,9 @@
 
   <div id="joinRoom" style="display: none;">
     <div class="form-group row">
-      <label for="usr">Name:</label>
+      <label for="usr"><font color="white">Name:</font></label>
       <input type="text" class="form-control" id="usrjoin">
-      <label for="code">Code:</label>
+      <label for="code"><font color="white" >Code:</font></label>
       <input type="text" class="form-control" id="code">
       <br/>
       <button onclick="onJoinRoom()" class="btn btn-success btn-block">Join</button>
