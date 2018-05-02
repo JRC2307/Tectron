@@ -2,20 +2,18 @@ class Scene {
 
   constructor(players) {
 
-    this.players = players
+    this.players = players;
     this.createFirstPersonCamera();
     this.createMiniMapCamera();
 
     this.scene = new THREE.Scene();
-
-    let helper = new THREE.CameraHelper( this.miniMapCamera );
-    this.scene.add( helper );
 
     for (var player of players) {
       this.scene.add( player.model );
     }
 
     this.createGroundPlane();
+    this.createWalls();
     this.addLights();
 
     this.configureRenderer();
@@ -31,7 +29,7 @@ class Scene {
       70,
       window.innerWidth / window.innerHeight,
       0.01,
-      1000
+      500
     );
 
     this.firstPersonCamera.position.set(-60, 10, 0);
@@ -47,10 +45,10 @@ class Scene {
       70,
       window.innerWidth / window.innerHeight,
       0.01,
-      100
+      110
     );
 
-    this.miniMapCamera.position.set(0, 50, 0);
+    this.miniMapCamera.position.set(0, 100, 0);
 
     this.miniMapCamera.lookAt(new THREE.Vector3(0,0,0));
     this.miniMapCamera.up = new THREE.Vector3(0,0,0);
@@ -60,16 +58,59 @@ class Scene {
   createGroundPlane() {
     // Comment the next 4 lines for textures:
     let groundPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry( 1000, 1000 ),
+      new THREE.PlaneGeometry( 310, 160 ),
       new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
     );
 
     groundPlane.material.side = THREE.DoubleSide;
     groundPlane.position.set(0, -5, 0);
     groundPlane.rotation.x = Math.PI / 2;
-    groundPlane.castShadow = true; //default is false
     groundPlane.receiveShadow = true;
     this.scene.add(groundPlane);
+  }
+
+  createWalls(){
+    // North
+    let northWall = new THREE.Mesh(
+      new THREE.PlaneGeometry( 310, 10 ),
+      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+    );
+    northWall.material.side = THREE.DoubleSide;
+    northWall.position.set(0, 0, -80);
+    northWall.receiveShadow = true;
+    this.scene.add(northWall);
+
+    // South
+    let southWall = new THREE.Mesh(
+      new THREE.PlaneGeometry( 310, 10 ),
+      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+    );
+    southWall.material.side = THREE.DoubleSide;
+    southWall.position.set(0, 0, 80);
+    southWall.receiveShadow = true;
+    this.scene.add(southWall);
+
+    // East
+    let eastWall = new THREE.Mesh(
+      new THREE.PlaneGeometry( 160, 10 ),
+      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+    );
+    eastWall.material.side = THREE.DoubleSide;
+    eastWall.position.set(155, 0, 0);
+    eastWall.rotation.y = Math.PI / 2;
+    eastWall.receiveShadow = true;
+    this.scene.add(eastWall);
+
+    // West
+    let westWall = new THREE.Mesh(
+      new THREE.PlaneGeometry( 160, 10 ),
+      new THREE.MeshStandardMaterial( {color: 0x003399, side: THREE.DoubleSide} )
+    );
+    westWall.material.side = THREE.DoubleSide;
+    westWall.position.set(-155, 0, 0);
+    westWall.rotation.y = Math.PI / 2;
+    westWall.receiveShadow = true;
+    this.scene.add(westWall);
   }
 
 

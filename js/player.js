@@ -11,7 +11,7 @@ class Player {
     this.speed = 1;
 
     // Setup the players facing each other
-    switch(number) {
+    switch(this.number) {
       case 1:
         this.direction = 90;
         this.position = { x: 0, z: 10 };
@@ -84,7 +84,7 @@ class Player {
     this.position.z += this.getZMovement();
 
     this.tailDelay++;
-    if (!(this.tailDelay % 2))
+    if (!(this.tailDelay % 3))
       this.addTail();
 
     this.model.position.x = this.position.x
