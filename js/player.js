@@ -11,7 +11,7 @@ class Player {
     this.speed = 1;
 
     // Setup the players facing each other
-    switch(number) {
+    switch(this.number) {
       case 1:
         this.direction = 90;
         this.position = { x: 0, z: 10 };

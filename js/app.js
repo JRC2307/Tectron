@@ -1,5 +1,5 @@
 let players = [];
-let debugMode = 1;
+let debugMode = true;
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
@@ -97,7 +97,9 @@ async function ticker(player) {
     await sleep(150);
     let updatedPlayer = Object.assign({}, player);
     delete updatedPlayer.model;
-    updateCurrentPlayerDocument(updatedPlayer);
+    if(!debugMode){
+      updateCurrentPlayerDocument(updatedPlayer);
+    }
   }
 }
 
