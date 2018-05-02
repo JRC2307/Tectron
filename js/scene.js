@@ -59,9 +59,10 @@ class Scene {
 
   createGroundPlane() {
     // Comment the next 4 lines for textures:
+    var texture = THREE.ImageUtils.loadTexture('resources/map.jpg');
     let groundPlane = new THREE.Mesh(
       new THREE.PlaneGeometry( 1000, 1000 ),
-      new THREE.MeshStandardMaterial( {color: 0x6B69FE, side: THREE.DoubleSide} )
+      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
 
     groundPlane.material.side = THREE.DoubleSide;
@@ -190,6 +191,7 @@ class Scene {
           tail.position.set(player.tail[player.tail.length-1].x, 0, player.tail[player.tail.length-1].z);
           tail.castShadow = true;
           tail.receiveShadow = true;
+
           // Add tail to the scene
           this.scene.add(tail);
           player.tail = [];
