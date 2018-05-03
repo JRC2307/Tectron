@@ -3,10 +3,10 @@ class Scene {
   constructor(players) {
 
     this.players = players;
+    this.scene = new THREE.Scene();
+
     this.createFirstPersonCamera();
     this.createMiniMapCamera();
-
-    this.scene = new THREE.Scene();
 
     for (var player of players) {
       this.scene.add( player.model );
@@ -24,6 +24,10 @@ class Scene {
   }
 
   createFirstPersonCamera() {
+    // fps camera pivot for rotation
+    this.fpsCameraPivot = new THREE.Object3D();
+    this.fpsCameraPivot.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+
     // firstPersonCamera initialization
     this.firstPersonCamera = new THREE.PerspectiveCamera(
       70,
@@ -32,10 +36,14 @@ class Scene {
       500
     );
 
-    this.firstPersonCamera.position.set(-60, 10, 0);
+    this.firstPersonCamera.position.set(0, 10, 20);
+    this.firstPersonCamera.lookAt(new THREE.Vector3(0,-20,-20));
+    // this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+    this.fpsCameraPivot.add( this.firstPersonCamera );
+    this.scene.add( this.fpsCameraPivot );
 
-    this.firstPersonCamera.lookAt(new THREE.Vector3(0,0,0));
-    this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
+    var fpsHelper = new THREE.CameraHelper( this.firstPersonCamera );
+    this.scene.add( fpsHelper );
   }
 
 
@@ -133,61 +141,31 @@ class Scene {
   }
 
   setFirstPersonCameraDirection(player){
+    // For smooth animation, check:
+    // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
+    this.fpsCameraPivot.position.set(
+      player.model.position.x,
+      player.model.position.y,
+      player.model.position.z
+    );
     switch(player.direction) {
       case 0:
-        // Camera 1 Orientation
-        this.firstPersonCamera.position.set(
-          player.model.position.x,
-          player.model.position.y + 10,
-          player.model.position.z + 20
-        );
-        this.firstPersonCamera.lookAt(
-          player.model.position.x,
-          player.model.position.y -20,
-          player.model.position.z -20
-        );
+        // East
+        this.fpsCameraPivot.rotation.y = (270 * Math.PI)/180;
         break;
       case 90:
-        // Camera 1 Orientation
-        this.firstPersonCamera.position.set(
-          player.model.position.x,
-          player.model.position.y + 10,
-          player.model.position.z + 20
-        );
-        this.firstPersonCamera.lookAt(
-          player.model.position.x,
-          player.model.position.y -20,
-          player.model.position.z -20
-        );
+        // North
+        this.fpsCameraPivot.rotation.y = 0;
         break;
       case 180:
-        // Camera 1 Orientation
-        this.firstPersonCamera.position.set(
-          player.model.position.x,
-          player.model.position.y + 10,
-          player.model.position.z + 20
-        );
-        this.firstPersonCamera.lookAt(
-          player.model.position.x,
-          player.model.position.y -20,
-          player.model.position.z -20
-        );
+        // West
+        this.fpsCameraPivot.rotation.y = (90 * Math.PI)/180;
         break;
       case 270:
-        // Camera 1 Orientation
-        this.firstPersonCamera.position.set(
-          player.model.position.x,
-          player.model.position.y + 10,
-          player.model.position.z + 20
-        );
-        this.firstPersonCamera.lookAt(
-          player.model.position.x,
-          player.model.position.y -20,
-          player.model.position.z -20
-        );
+        // South
+        this.fpsCameraPivot.rotation.y = Math.PI;
         break;
     }
-    this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
   }
 
   renderPlayers() {
