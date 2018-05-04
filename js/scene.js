@@ -72,7 +72,7 @@ class Scene {
     );
 
     groundPlane.material.side = THREE.DoubleSide;
-    groundPlane.position.set(0, -5, 0);
+    groundPlane.position.set(0, -2, 0);
     groundPlane.rotation.x = Math.PI / 2;
     groundPlane.receiveShadow = true;
     this.scene.add(groundPlane);
@@ -143,29 +143,62 @@ class Scene {
   }
 
   setFirstPersonCameraDirection(player){
-    // For smooth animation, check:
-    // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
     this.fpsCameraPivot.position.set(
       player.model.position.x,
       player.model.position.y,
       player.model.position.z
     );
+    let rotation = 0;
+    let rotationSpeed = 0.2;
+    let rotationMargin = 0.2;
     switch(player.direction) {
       case 0:
         // East
-        this.fpsCameraPivot.rotation.y = (270 * Math.PI)/180;
+        rotation = (270 * Math.PI)/180;
+        if(this.fpsCameraPivot.rotation.y === 0)
+          this.fpsCameraPivot.rotation.y = 6.28319;
+        if(this.fpsCameraPivot.rotation.y > (rotation + rotationMargin)){
+          this.fpsCameraPivot.rotation.y -= rotationSpeed;
+        } else if(this.fpsCameraPivot.rotation.y < (rotation - rotationMargin)) {
+          this.fpsCameraPivot.rotation.y += rotationSpeed;
+        } else {
+          this.fpsCameraPivot.rotation.y = rotation;
+        }
         break;
       case 90:
         // North
-        this.fpsCameraPivot.rotation.y = 0;
+        rotation = 0;
+        if(this.fpsCameraPivot.rotation.y >= (270 * Math.PI)/180)
+          rotation = (2 * Math.PI);
+        if(this.fpsCameraPivot.rotation.y > (rotation + rotationMargin)){
+          this.fpsCameraPivot.rotation.y -= rotationSpeed;
+        } else if(this.fpsCameraPivot.rotation.y < (rotation - rotationMargin)) {
+          this.fpsCameraPivot.rotation.y += rotationSpeed;
+        } else {
+          this.fpsCameraPivot.rotation.y = 0;
+        }
         break;
       case 180:
         // West
-        this.fpsCameraPivot.rotation.y = (90 * Math.PI)/180;
+        rotation = (90 * Math.PI)/180;
+        if(this.fpsCameraPivot.rotation.y > (rotation + rotationMargin)){
+          this.fpsCameraPivot.rotation.y -= rotationSpeed;
+        } else if(this.fpsCameraPivot.rotation.y < (rotation - rotationMargin)) {
+          this.fpsCameraPivot.rotation.y += rotationSpeed;
+        } else {
+          this.fpsCameraPivot.rotation.y = rotation;
+        }
         break;
       case 270:
         // South
-        this.fpsCameraPivot.rotation.y = Math.PI;
+        rotation = Math.PI;
+        if(this.fpsCameraPivot.rotation.y > (rotation + rotationMargin)){
+          this.fpsCameraPivot.rotation.y -= rotationSpeed;
+        } else if(this.fpsCameraPivot.rotation.y < (rotation - rotationMargin)) {
+          this.fpsCameraPivot.rotation.y += rotationSpeed;
+        } else {
+          this.fpsCameraPivot.rotation.y = rotation;
+        }
         break;
     }
   }
