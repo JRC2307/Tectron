@@ -12,6 +12,8 @@ class Scene {
       this.scene.add( player.model );
     }
 
+    this.collidableMeshList = [];
+
     this.createGroundPlane();
     this.createWalls();
     this.addLights();
@@ -36,8 +38,8 @@ class Scene {
       500
     );
 
-    this.firstPersonCamera.position.set(0, 10, 20);
-    this.firstPersonCamera.lookAt(new THREE.Vector3(0,-20,-20));
+    this.firstPersonCamera.position.set(0, 20, 20);
+    this.firstPersonCamera.lookAt(new THREE.Vector3(0,-10,-20));
     // this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
     this.fpsCameraPivot.add( this.firstPersonCamera );
     this.scene.add( this.fpsCameraPivot );
@@ -79,26 +81,28 @@ class Scene {
   }
 
   createWalls(){
-    // North
     var texture = THREE.ImageUtils.loadTexture('resources/wall2.jpg');
     let wall = new THREE.Mesh(
-      new THREE.PlaneGeometry( 400, 100 ),
+      new THREE.PlaneGeometry(400, 400),
       new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
 
     wall.material.side = THREE.DoubleSide;
 
+    // North Wall
     let northWall = wall
     northWall.position.set(0, 0, -200);
     northWall.receiveShadow = true;
     this.scene.add(northWall);
+    this.collidableMeshList.push(northWall)
 
-     // SouthWall
+    // SouthWall
     let southWall = wall
 
     southWall.position.set(0, 0, 200);
     southWall.receiveShadow = true;
     this.scene.add(southWall);
+    this.collidableMeshList.push(southWall)
 
     // East
     let eastWall = wall
@@ -106,6 +110,7 @@ class Scene {
     eastWall.rotation.y = Math.PI / 2;
     eastWall.receiveShadow = true;
     this.scene.add(eastWall);
+    this.collidableMeshList.push(eastWall)
 
     // West
     let westWall = wall
@@ -113,6 +118,7 @@ class Scene {
     westWall.rotation.y = Math.PI / 2;
     westWall.receiveShadow = true;
     this.scene.add(westWall);
+    this.collidableMeshList.push(westWall)
   }
 
 
@@ -250,7 +256,6 @@ class Scene {
     this.players.push(player);
   }
 
-
   // This function could be refactored
   render() {
 
@@ -266,4 +271,31 @@ class Scene {
     this.renderer.render( this.scene, this.miniMapCamera );
   }
 
+  update() {
+    for (var player of this.players) {
+
+      if (player.controllable && player.isAlive) {
+
+        var originPoint = player.model.position.clone();
+
+        for (var vertexIndex = 0;
+          vertexIndex < player.model.geometry.vertices.length;
+          vertexIndex++) {
+
+          var localVertex = player.model.geometry.vertices[vertexIndex].clone();
+          var globalVertex = localVertex.applyMatrix4( player.model.matrix );
+          var directionVector = globalVertex.sub( player.model.position );
+          var ray = new THREE.Raycaster(
+            originPoint, directionVector.clone().normalize() );
+          var collisionResults = ray.intersectObjects( this.collidableMeshList );
+
+          if (collisionResults.length > 0 &&
+            collisionResults[0].distance < directionVector.length() ) {
+            player.isAlive = false;
+            console.log('Collission Detected');
+          }
+        }
+      }
+    }
+  }
 }

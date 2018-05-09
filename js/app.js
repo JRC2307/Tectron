@@ -75,6 +75,7 @@ function subscribeFirebasePlayersSnapshot() {
 function animate() {
   requestAnimationFrame(animate);
   scene.render();
+  scene.update();
 }
 
 
