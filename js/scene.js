@@ -253,6 +253,9 @@ class Scene {
         console.log(player.direction);
         let correction = 5
 
+        // I needed to add this because the player would colide against his
+        // own tail whenever there was a switch in direction
+
         switch(player.direction) {
           case 0:
             tail.position.set(player.tail[0].x - correction, 0, player.tail[0].z);
