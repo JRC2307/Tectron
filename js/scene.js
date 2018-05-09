@@ -79,8 +79,7 @@ class Scene {
     this.scene.add(groundPlane);
   }
 
-  createWalls(){
-    var texture = THREE.ImageUtils.loadTexture('resources/wall2.jpg');
+  createWall(texture) {
     let wall = new THREE.Mesh(
       new THREE.PlaneGeometry(400, 400),
       new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
@@ -88,23 +87,28 @@ class Scene {
 
     wall.material.side = THREE.DoubleSide;
 
+    return wall;
+  }
+
+  createWalls(){
+    var texture = THREE.ImageUtils.loadTexture('resources/wall2.jpg');
+
     // North Wall
-    let northWall = wall
+    let northWall = this.createWall(texture);
     northWall.position.set(0, 0, -200);
     northWall.receiveShadow = true;
     this.scene.add(northWall);
     this.collidableMeshList.push(northWall)
 
     // SouthWall
-    let southWall = wall
-
+    let southWall = this.createWall(texture);
     southWall.position.set(0, 0, 200);
     southWall.receiveShadow = true;
     this.scene.add(southWall);
     this.collidableMeshList.push(southWall)
 
     // East
-    let eastWall = wall
+    let eastWall = this.createWall(texture);
     eastWall.position.set(200, 0, 0);
     eastWall.rotation.y = Math.PI / 2;
     eastWall.receiveShadow = true;
@@ -112,7 +116,7 @@ class Scene {
     this.collidableMeshList.push(eastWall)
 
     // West
-    let westWall = wall
+    let westWall = this.createWall(texture);
     westWall.position.set(-200, 0, 0);
     westWall.rotation.y = Math.PI / 2;
     westWall.receiveShadow = true;
@@ -250,7 +254,6 @@ class Scene {
         let geometry = new THREE.BoxGeometry(x, 4, z);
         let tail = new THREE.Mesh( geometry, material);
 
-        console.log(player.direction);
         let correction = 5
 
         // I needed to add this because the player would colide against his
