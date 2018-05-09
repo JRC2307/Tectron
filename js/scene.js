@@ -227,30 +227,48 @@ class Scene {
         // Create a new tail object
         let x, z;
 
-        if(player.controllable) {
-          if(player.direction === 180 || player.direction === 0){
+        if(player.controllable && player.direction === 180) {
             x = 3
             z = 0.5
-          } else {
+        } else if(player.controllable && player.direction === 0) {
+            x = 3
+            z = 0.5
+        } else if (player.controllable) {
             x = 0.5
             z = 3
-          }
-        } else {
-          if(player.direction === 180 || player.direction === 0){
+        } else if (!player.controllable && player.direction === 180) {
             x = 10
             z = 0.5
-          } else {
+        } else if (!player.controllable && player.direction === 0) {
+            x = 10
+            z = 0.5
+        } else {
             x = 0.5
             z = 10
-          }
         }
 
         let geometry = new THREE.BoxGeometry(x, 4, z);
         let tail = new THREE.Mesh( geometry, material);
-        console.log(player.direction)
-        tail.position.set(player.tail[0].x,
-          0,
-          player.tail[0].z);
+
+        console.log(player.direction);
+        let correction = 5
+
+        switch(player.direction) {
+          case 0:
+            tail.position.set(player.tail[0].x - correction, 0, player.tail[0].z);
+            break;
+          case 90:
+            tail.position.set(player.tail[0].x, 0, player.tail[0].z + correction);
+            break;
+          case 180:
+            tail.position.set(player.tail[0].x + correction, 0, player.tail[0].z);
+            break;
+          case 270:
+            tail.position.set(player.tail[0].x, 0, player.tail[0].z - correction);
+            break;
+        }
+
+
         tail.castShadow = true;
         tail.receiveShadow = true;
 
@@ -304,7 +322,7 @@ class Scene {
           if (collisionResults.length > 0 &&
             collisionResults[0].distance < directionVector.length() ) {
 
-            // player.isAlive = false;
+            player.isAlive = false;
             console.log('Collission Detected');
           }
         }
