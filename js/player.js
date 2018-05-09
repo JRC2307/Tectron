@@ -30,21 +30,29 @@ class Player {
         break;
     }
 
-    this.model = this.initPlayerModel();
+    console.log(this.position);
+    this.initPlayerModel().then( function (model) {
+      this.model = model;
+    });
+    console.log(this.model.position);
+    this.model.castShadow = true; //default is false
+    this.model.receiveShadow = true;
   }
 
-  initPlayerModel() {
-    let geometry = new THREE.BoxGeometry( 5, 5, 5 );
-    let material = new THREE.MeshStandardMaterial({color: 0xffff00});
-    let model = new THREE.Mesh( geometry, material );
+  async initPlayerModel() {
 
-    model.position.set(this.position.x, 0, this.position.z);
-    model.castShadow = true; //default is false
-    model.receiveShadow = true;
-    model.name = this.id
+    let mtlLoader = new THREE.MTLLoader();
+      return await mtlLoader.load( 'LC/HQ_Movie cycle.mtl', async function(  materials ) {
+        materials.preload();
+        let objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        return await objLoader.load( 'LC/HQ_Movie cycle.obj', function ( model ) {
+          scene.add( model );
+        });
+      });
 
-    return model;
-  }
+
+   }
 
   addTail() {
     this.tail.push({ x: this.position.x, z: this.position.z});

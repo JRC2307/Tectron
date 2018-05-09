@@ -1,5 +1,5 @@
 let players = [];
-let debugMode = false;
+let debugMode = true;
 
 let displayWindow = {
   x: window.innerWidth - (window.innerWidth/4) - 10,
