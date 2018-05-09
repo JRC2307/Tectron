@@ -40,7 +40,6 @@ class Scene {
 
     this.firstPersonCamera.position.set(0, 20, 20);
     this.firstPersonCamera.lookAt(new THREE.Vector3(0,-10,-20));
-    // this.firstPersonCamera.up = new THREE.Vector3(0,0,0);
     this.fpsCameraPivot.add( this.firstPersonCamera );
     this.scene.add( this.fpsCameraPivot );
 
@@ -220,33 +219,45 @@ class Scene {
 
   renderPlayersTail() {
     let material = new THREE.MeshStandardMaterial({color: 0x00ff00});
-    for (var player of this.players) {
-      if (player.isAlive) {
-        // Create a new tail object
-        if (player.tail.length > 0){
-          let geometry;
-          if(player.controllable) {
-            if(player.direction === 180 || player.direction === 0){
-              geometry = new THREE.BoxGeometry( 3, 4, 0.5);
-            } else {
-              geometry = new THREE.BoxGeometry( 0.5, 4, 3);
-            }
-          } else {
-            if(player.direction === 180 || player.direction === 0){
-              geometry = new THREE.BoxGeometry( 10, 4, 0.5);
-            } else {
-              geometry = new THREE.BoxGeometry( 0.5, 4, 10);
-            }
-          }
-          let tail = new THREE.Mesh( geometry, material);
-          tail.position.set(player.tail[player.tail.length-1].x, 0, player.tail[player.tail.length-1].z);
-          tail.castShadow = true;
-          tail.receiveShadow = true;
 
-          // Add tail to the scene
-          this.scene.add(tail);
-          player.tail = [];
+    for (var player of this.players) {
+
+      if (player.isAlive && player.tail.length > 0) {
+
+        // Create a new tail object
+        let x, z;
+
+        if(player.controllable) {
+          if(player.direction === 180 || player.direction === 0){
+            x = 3
+            z = 0.5
+          } else {
+            x = 0.5
+            z = 3
+          }
+        } else {
+          if(player.direction === 180 || player.direction === 0){
+            x = 10
+            z = 0.5
+          } else {
+            x = 0.5
+            z = 10
+          }
         }
+
+        let geometry = new THREE.BoxGeometry(x, 4, z);
+        let tail = new THREE.Mesh( geometry, material);
+        console.log(player.direction)
+        tail.position.set(player.tail[0].x,
+          0,
+          player.tail[0].z);
+        tail.castShadow = true;
+        tail.receiveShadow = true;
+
+        // Add tail to the scene
+        this.scene.add(tail);
+        this.collidableMeshList.push(tail)
+        player.tail = [];
       }
     }
   }
@@ -274,6 +285,7 @@ class Scene {
   update() {
     for (var player of this.players) {
 
+
       if (player.controllable && player.isAlive) {
 
         var originPoint = player.model.position.clone();
@@ -291,7 +303,8 @@ class Scene {
 
           if (collisionResults.length > 0 &&
             collisionResults[0].distance < directionVector.length() ) {
-            player.isAlive = false;
+
+            // player.isAlive = false;
             console.log('Collission Detected');
           }
         }
