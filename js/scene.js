@@ -81,42 +81,34 @@ class Scene {
   createWalls(){
     // North
     var texture = THREE.ImageUtils.loadTexture('resources/wall2.jpg');
-    let northWall = new THREE.Mesh(
+    let wall = new THREE.Mesh(
       new THREE.PlaneGeometry( 400, 100 ),
       new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
-    northWall.material.side = THREE.DoubleSide;
+
+    wall.material.side = THREE.DoubleSide;
+
+    let northWall = wall
     northWall.position.set(0, 0, -200);
     northWall.receiveShadow = true;
     this.scene.add(northWall);
 
-    // South
-    let southWall = new THREE.Mesh(
-      new THREE.PlaneGeometry( 400, 100 ),
-      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
-    );
-    southWall.material.side = THREE.DoubleSide;
+     // SouthWall
+    let southWall = wall
+
     southWall.position.set(0, 0, 200);
     southWall.receiveShadow = true;
     this.scene.add(southWall);
 
     // East
-    let eastWall = new THREE.Mesh(
-      new THREE.PlaneGeometry( 400, 100 ),
-      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
-    );
-    eastWall.material.side = THREE.DoubleSide;
+    let eastWall = wall
     eastWall.position.set(200, 0, 0);
     eastWall.rotation.y = Math.PI / 2;
     eastWall.receiveShadow = true;
     this.scene.add(eastWall);
 
     // West
-    let westWall = new THREE.Mesh(
-      new THREE.PlaneGeometry( 400, 100 ),
-      new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
-    );
-    westWall.material.side = THREE.DoubleSide;
+    let westWall = wall
     westWall.position.set(-200, 0, 0);
     westWall.rotation.y = Math.PI / 2;
     westWall.receiveShadow = true;
