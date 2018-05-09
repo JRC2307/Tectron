@@ -54,10 +54,10 @@ class Scene {
       70,
       window.innerWidth / window.innerHeight,
       0.01,
-      110
+      140
     );
 
-    this.miniMapCamera.position.set(0, 100, 0);
+    this.miniMapCamera.position.set(0, 130, 0);
 
     this.miniMapCamera.lookAt(new THREE.Vector3(0,0,0));
     this.miniMapCamera.up = new THREE.Vector3(0,0,0);
@@ -68,7 +68,7 @@ class Scene {
     // Comment the next 4 lines for textures:
     var texture = THREE.ImageUtils.loadTexture('resources/floor.jpg');
     let groundPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry( 400, 400 ),
+      new THREE.PlaneGeometry( 310, 160 ),
       new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
 
@@ -79,9 +79,9 @@ class Scene {
     this.scene.add(groundPlane);
   }
 
-  createWall(texture) {
+  createWall(texture, x) {
     let wall = new THREE.Mesh(
-      new THREE.PlaneGeometry(400, 400),
+      new THREE.PlaneGeometry(x, 50),
       new THREE.MeshStandardMaterial( {map: texture, side: THREE.DoubleSide} )
     );
 
@@ -94,30 +94,30 @@ class Scene {
     var texture = THREE.ImageUtils.loadTexture('resources/wall2.jpg');
 
     // North Wall
-    let northWall = this.createWall(texture);
-    northWall.position.set(0, 0, -200);
+    let northWall = this.createWall(texture, 310);
+    northWall.position.set(0, 0, -80);
     northWall.receiveShadow = true;
     this.scene.add(northWall);
-    this.collidableMeshList.push(northWall)
+    this.collidableMeshList.push(northWall);
 
     // SouthWall
-    let southWall = this.createWall(texture);
-    southWall.position.set(0, 0, 200);
+    let southWall = this.createWall(texture, 310);
+    southWall.position.set(0, 0, 80);
     southWall.receiveShadow = true;
     this.scene.add(southWall);
-    this.collidableMeshList.push(southWall)
+    this.collidableMeshList.push(southWall);
 
     // East
-    let eastWall = this.createWall(texture);
-    eastWall.position.set(200, 0, 0);
+    let eastWall = this.createWall(texture, 160);
+    eastWall.position.set(155, 0, 0);
     eastWall.rotation.y = Math.PI / 2;
     eastWall.receiveShadow = true;
     this.scene.add(eastWall);
-    this.collidableMeshList.push(eastWall)
+    this.collidableMeshList.push(eastWall);
 
     // West
-    let westWall = this.createWall(texture);
-    westWall.position.set(-200, 0, 0);
+    let westWall = this.createWall(texture, 160);
+    westWall.position.set(-155, 0, 0);
     westWall.rotation.y = Math.PI / 2;
     westWall.receiveShadow = true;
     this.scene.add(westWall);

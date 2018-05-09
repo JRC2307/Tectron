@@ -57,11 +57,14 @@ function subscribeFirebasePlayersSnapshot() {
 
         players.push(player);
         scene.addPlayerModels(player);
+        console.log("------- add new player to scene... -------");
       }
 
-      players.forEach(function(player) {
+      scene.players.forEach(function(player) {
         if (player.id !== mainPlayerID && player.id === firebasePlayer.id) {
-          player.setPosition(firebasePlayer.data().position);
+          console.log("snapshot data: "+ firebasePlayer.data());
+          if(firebasePlayer.data().position !== undefined)
+            player.setPosition(firebasePlayer.data().position);
           player.direction = firebasePlayer.data().direction;
           player.addTail();
           player.controllable = false;
@@ -98,6 +101,7 @@ async function ticker(player) {
     await sleep(150);
     let updatedPlayer = Object.assign({}, player);
     delete updatedPlayer.model;
+    console.log(updatedPlayer.position);
     if(!debugMode){
       updateCurrentPlayerDocument(updatedPlayer);
     }

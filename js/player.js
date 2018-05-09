@@ -8,25 +8,25 @@ class Player {
     this.tail = [];
     this.tailDelay = 0;
 
-    this.speed = 1;
+    this.speed = 0.75;
 
     // Setup the players facing each other
     switch(this.number) {
       case 1:
         this.direction = 90;
-        this.position = { x: 0, z: 10 };
+        this.position = { x: 0, z: 50 };
         break;
       case 2:
         this.direction = 270;
-        this.position = { x: 0, z: -10 };
+        this.position = { x: 0, z: -50 };
         break;
       case 3:
         this.direction = 180;
-        this.position = { x: 10, z: 10 };
+        this.position = { x: 50, z: 50 };
         break;
       case 4:
         this.direction = 0;
-        this.position = { x: -10, z: 0 };
+        this.position = { x: -50, z: 0 };
         break;
     }
 
@@ -84,7 +84,7 @@ class Player {
     this.position.z += this.getZMovement();
 
     this.tailDelay++;
-    if (!(this.tailDelay % 3))
+    if (!(this.tailDelay % 2))
       this.addTail();
 
     this.model.position.x = this.position.x
