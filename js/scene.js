@@ -328,7 +328,7 @@ class Scene {
           if (collisionResults.length > 0 &&
             collisionResults[0].distance < directionVector.length() ) {
 
-            player.isAlive = false;
+            player.kill();
             console.log('Collission Detected');
           }
         }

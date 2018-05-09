@@ -124,6 +124,10 @@ class Player {
     }
   }
 
+  kill() {
+    this.isAlive = false;
+  }
+
   bark() {
     console.log('Woof');
   }
