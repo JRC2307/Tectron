@@ -1,12 +1,12 @@
 // Initialize Firebase
-var config = {
-  apiKey: "AIzaSyAl54cSjxziyWTg3ocge3AZM9-t4cEMEFo",
-  authDomain: "tectron-7251c.firebaseapp.com",
-  databaseURL: "https://tectron-7251c.firebaseio.com",
-  projectId: "tectron-7251c",
-  storageBucket: "",
-  messagingSenderId: "259684705582"
-};
+// var config = {
+//   apiKey: "AIzaSyAl54cSjxziyWTg3ocge3AZM9-t4cEMEFo",
+//   authDomain: "tectron-7251c.firebaseapp.com",
+//   databaseURL: "https://tectron-7251c.firebaseio.com",
+//   projectId: "tectron-7251c",
+//   storageBucket: "",
+//   messagingSenderId: "259684705582"
+// };
 // var config = {
 //   apiKey: "AIzaSyBNqb5PRq4jNW6gHvxx2j8E1T8-FAnXGYE",
 //   authDomain: "tectron111.firebaseapp.com",
@@ -15,6 +15,14 @@ var config = {
 //   storageBucket: "tectron111.appspot.com",
 //   messagingSenderId: "1087328543626"
 // };
+var config = {
+  apiKey: "AIzaSyCGM8g6cDtApZDYDcVLRV_oigHo2CJnOis",
+  authDomain: "tectron2-1111.firebaseapp.com",
+  databaseURL: "https://tectron2-1111.firebaseio.com",
+  projectId: "tectron2-1111",
+  storageBucket: "",
+  messagingSenderId: "990911925223"
+};
 
 firebase.initializeApp(config);
 
