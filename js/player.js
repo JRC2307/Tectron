@@ -34,8 +34,9 @@ class Player {
   }
 
   initPlayerModel() {
+    let texture = THREE.ImageUtils.loadTexture('resources/model1.jpeg');
     let geometry = new THREE.BoxGeometry( 5, 5, 5 );
-    let material = new THREE.MeshStandardMaterial({color: 0xffff00});
+    let material = new THREE.MeshStandardMaterial({map: texture, side: THREE.DoubleSide});
     let model = new THREE.Mesh( geometry, material );
 
     model.position.set(this.position.x, 0, this.position.z);
